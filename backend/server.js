@@ -63,7 +63,7 @@ async function ensureAvatarBucket() {
     if (buckets.some((bucket) => bucket.name === AVATAR_BUCKET)) return;
     const { error: createError } = await supabase.storage.createBucket(AVATAR_BUCKET, {
         public: true,
-        fileSizeLimit: "5MB",
+        fileSizeLimit: "3MB",
         allowedMimeTypes: ["image/jpeg", "image/png", "image/webp"]
     });
     if (createError) console.error("Could not create the avatars bucket:", createError.message);
@@ -82,7 +82,7 @@ async function ensureTeamFilesBucket() {
     if (buckets.some((bucket) => bucket.name === TEAM_FILES_BUCKET)) return;
     const { error: createError } = await supabase.storage.createBucket(TEAM_FILES_BUCKET, {
         public: false,
-        fileSizeLimit: "20MB",
+        fileSizeLimit: "3MB",
         allowedMimeTypes: [
             "image/jpeg", "image/png", "image/webp", "image/gif",
             "application/pdf", "text/plain", "text/csv",
@@ -125,7 +125,12 @@ function safeMessage(error, fallback = "Something went wrong. Please try again."
 
 const asyncHandler = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
 
-app.use(express.json({ limit: "28mb" })); // higher limit to fit a base64-encoded team file upload (up to 20MB, +~33% for base64)
+// Kept under Vercel's hard 4.5MB serverless request-body cap: a 3MB file
+// becomes ~4MB once base64-encoded, plus a little JSON overhead. Raising
+// this alone would not help on Vercel — the platform rejects an oversized
+// body before Express ever sees it — so the upload limits below are capped
+// to match, not just this parser.
+app.use(express.json({ limit: "5mb" }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "../frontend")));
 
@@ -1171,7 +1176,7 @@ app.post("/api/profile/photo", requireAuth(async (req, res, user) => {
     if (!match) return res.status(400).json({ success: false, message: "Only JPEG, PNG, or WebP images are supported." });
     const [, mimeType, , base64Data] = match;
     const buffer = Buffer.from(base64Data, "base64");
-    if (buffer.length > 5 * 1024 * 1024) return res.status(400).json({ success: false, message: "Image must be smaller than 5MB." });
+    if (buffer.length > 3 * 1024 * 1024) return res.status(400).json({ success: false, message: "Image must be smaller than 3MB." });
 
     const path = `${user.id}.jpg`; // always normalized to jpeg client-side before upload
     const { error: uploadError } = await supabase.storage.from(AVATAR_BUCKET).upload(path, buffer, { contentType: mimeType, upsert: true });
@@ -1988,7 +1993,7 @@ app.post("/api/projects/:id/files", requireAuth(async (req, res, user) => {
     const [, contentType, base64Data] = match;
     if (!TEAM_FILE_TYPES.has(contentType)) return res.status(400).json({ success: false, message: "That file type isn't supported." });
     const buffer = Buffer.from(base64Data, "base64");
-    if (buffer.length > 20 * 1024 * 1024) return res.status(400).json({ success: false, message: "File must be smaller than 20MB." });
+    if (buffer.length > 3 * 1024 * 1024) return res.status(400).json({ success: false, message: "File must be smaller than 3MB." });
 
     const path = `${req.params.id}/${crypto.randomUUID()}-${fileName}`;
     const { error: uploadError } = await supabase.storage.from(TEAM_FILES_BUCKET).upload(path, buffer, { contentType, upsert: false });

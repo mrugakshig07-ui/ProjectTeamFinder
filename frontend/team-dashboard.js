@@ -264,7 +264,7 @@ $('tdUploadBtn').addEventListener('click', () => $('tdFileInput').click());
 $('tdFileInput').addEventListener('change', async () => {
   const file = $('tdFileInput').files[0];
   if (!file) return;
-  if (file.size > 20 * 1024 * 1024) { setMessage('File must be smaller than 20MB.', 'error'); $('tdFileInput').value = ''; return; }
+  if (file.size > 3 * 1024 * 1024) { setMessage('File must be smaller than 3MB.', 'error'); $('tdFileInput').value = ''; return; }
   const reader = new FileReader();
   reader.onload = async () => {
     $('tdUploadBtn').disabled = true;
