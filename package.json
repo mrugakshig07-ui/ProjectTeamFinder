@@ -5,7 +5,7 @@
   "description": "ProjectFinder (Express + Supabase backend, static frontend) — Vercel deployment root",
   "type": "commonjs",
   "engines": {
-    "node": "20.x"
+    "node": "22.x"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4",
