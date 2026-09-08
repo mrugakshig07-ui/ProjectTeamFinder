@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Create account · ProjectFinder</title><link rel="stylesheet" href="style.css"></head>
+<body class="auth-page">
+    <main class="auth-shell">
+        <section class="auth-intro" aria-hidden="true"><a class="brand" href="/index.html"><span class="brand-mark">✦</span> ProjectFinder</a><div class="intro-copy"><span class="eyebrow">START BUILDING</span><h1>Your next collaboration is one sign-up away.</h1><p>Create a profile that shows collaborators exactly what you bring to the table.</p></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div></section>
+        <section class="auth-panel">
+            <a href="/index.html" class="back-link">← Back to home</a><div class="auth-heading"><span class="eyebrow">CREATE ACCOUNT</span><h2>Join ProjectFinder</h2><p>It only takes a minute to get started.</p></div>
+            <form id="registerForm" class="auth-form">
+                <label for="name">Your name</label><input type="text" id="name" autocomplete="name" placeholder="What should collaborators call you?" required>
+                <label for="username">Username</label><input type="text" id="username" autocomplete="username" placeholder="lowercase, no spaces" pattern="[a-z0-9_]{3,20}" maxlength="20" required>
+                <p class="form-hint" id="usernameHint">3-20 characters: lowercase letters, numbers, underscores.</p>
+                <label for="email">Email address</label><input type="email" id="email" autocomplete="email" placeholder="you@example.com" required>
+                <label for="password">Create a password</label><div class="password-field"><input type="password" id="password" autocomplete="new-password" placeholder="8+ characters, uppercase, number & 2 symbols" minlength="8" required><button class="password-toggle" type="button" data-password-toggle="password" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.5"/></svg></button></div>
+                <label for="confirmPassword">Confirm password</label><div class="password-field"><input type="password" id="confirmPassword" autocomplete="new-password" placeholder="Enter the password again" minlength="8" required><button class="password-toggle" type="button" data-password-toggle="confirmPassword" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.5"/></svg></button></div>
+                <p class="form-hint">Use 8+ characters, an uppercase letter, a number, and 2 special characters.</p><button type="submit" class="primary-button auth-button">Create account <span>→</span></button>
+            </form>
+            <div id="registerMessage" class="profile-message" role="status"></div><p class="auth-footer">Already have an account? <a href="/login.html">Sign in</a></p>
+        </section>
+    </main>
+    <script>
+        document.querySelectorAll('[data-password-toggle]').forEach((button) => button.addEventListener('click', () => { const input=document.getElementById(button.dataset.passwordToggle); const visible=input.type==='text'; input.type=visible?'password':'text'; button.setAttribute('aria-pressed',String(!visible)); button.setAttribute('aria-label',visible?'Show password':'Hide password'); }));
+
+        function showMessage(el, text, type) { el.textContent = text; el.classList.remove('is-visible', 'is-error', 'is-success'); void el.offsetWidth; el.classList.add('is-visible', type === 'error' ? 'is-error' : 'is-success'); }
+        async function postJSON(url, body) {
+            let response;
+            try { response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); }
+            catch (err) { throw new Error("Can't reach the server. Make sure it's running and check your connection."); }
+            try { return await response.json(); }
+            catch (err) { throw new Error('Server sent an unexpected response. Please try again.'); }
+        }
+
+        const form=document.getElementById('registerForm'), message=document.getElementById('registerMessage'), button=form.querySelector('button[type="submit"]');
+        // Grabbed explicitly by id (not relied on as implicit globals): an <input id="name">
+        // collides with the built-in window.name, and window.name is a plain string, so a
+        // bare `name` reference in this script would silently point at that string instead
+        // of the input, breaking `.value`. Same trap exists for id="top", "location", etc.
+        const nameField = document.getElementById('name'), usernameField = document.getElementById('username'), emailField = document.getElementById('email'), passwordField = document.getElementById('password'), confirmField = document.getElementById('confirmPassword');
+        usernameField.addEventListener('input', () => { usernameField.value = usernameField.value.toLowerCase().replace(/[^a-z0-9_]/g, ''); });
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const hasStrongPassword = passwordField.value.length>=8 && /[A-Z]/.test(passwordField.value) && /[0-9]/.test(passwordField.value) && (passwordField.value.match(/[^A-Za-z0-9]/g)||[]).length>=2;
+            if (!/^[a-z0-9_]{3,20}$/.test(usernameField.value)) return showMessage(message, 'Username must be 3-20 characters: lowercase letters, numbers, underscores.', 'error');
+            if (passwordField.value !== confirmField.value) return showMessage(message, 'Passwords do not match.', 'error');
+            if (!hasStrongPassword) return showMessage(message, 'Choose a stronger password using the guidance above.', 'error');
+            showMessage(message, 'Creating your account…', 'neutral');
+            button.disabled = true; button.dataset.loading = 'true';
+            try {
+                const data = await postJSON('/api/register', { name: nameField.value.trim(), username: usernameField.value.trim(), email: emailField.value.trim(), password: passwordField.value });
+                if (data.success) { showMessage(message, 'Account created! Check your email to activate it.', 'success'); setTimeout(() => location.href = '/verify-email.html', 800); }
+                else { showMessage(message, data.message || 'We could not create your account.', 'error'); button.disabled = false; button.dataset.loading = 'false'; }
+            } catch (error) { showMessage(message, error.message, 'error'); button.disabled = false; button.dataset.loading = 'false'; }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>My Teams · ProjectFinder</title><link rel="stylesheet" href="style.css"><script src="app.js" defer></script><script src="ui.js"></script></head><body class="teams-page teamdash-page">
+<nav class="navbar"><div class="logo">ProjectFinder</div><div class="nav-links"><a class="nav-primary" href="projects.html">Projects</a><a class="nav-primary" href="members.html">Members</a><button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div></nav>
+<main class="teamdash-shell">
+
+  <!-- ============== PICKER: no team selected — every team you're in,
+       plus anything waiting on your reply. Replaces the old My Teams page. -->
+  <div id="teamdashPicker">
+    <p class="profile-label">TEAMS</p>
+    <h1>My Teams</h1>
+    <p class="team-intro">Every project you own or have joined, and anything waiting on your reply. Pick a team below to open its dashboard.</p>
+    <div id="tpMessage" class="profile-message" role="status"></div>
+
+    <section class="panel-card">
+      <div class="panel-card-header">
+        <h2>Invitations for you</h2>
+        <span class="count-badge" id="tpInviteCount">0</span>
+      </div>
+      <p class="panel-card-hint">Project owners who want you on their team. Accepting adds you to the roster straight away.</p>
+      <div id="tpInvitations"><p class="search-empty">Loading invitations…</p></div>
+    </section>
+
+    <section class="panel-card">
+      <div class="panel-card-header">
+        <h2>Join requests for my projects</h2>
+        <span class="count-badge" id="tpReqCount">0</span>
+      </div>
+      <p class="panel-card-hint">People asking to join a project you own.</p>
+      <div id="tpRequests"><p class="search-empty">Loading requests…</p></div>
+    </section>
+
+    <section class="panel-card">
+      <div class="panel-card-header">
+        <h2>Your teams</h2>
+        <span class="count-badge" id="tpTeamCount">0</span>
+      </div>
+      <div id="tpTeams" class="teamdash-switch-grid"><p class="search-empty">Loading your teams…</p></div>
+    </section>
+  </div>
+
+  <!-- ============== DASHBOARD: one specific team (?id=) ============== -->
+  <div id="teamdashState" hidden><p class="search-empty">Loading team dashboard…</p></div>
+
+  <div id="teamdashApp" hidden>
+    <a class="teamdash-back" href="team-dashboard.html">← All Teams</a>
+    <header class="teamdash-header">
+      <div class="teamdash-header-main">
+        <div class="teamdash-header-top">
+          <h1 id="tdTitle">—</h1>
+          <span class="status-pill" id="tdStatus">—</span>
+        </div>
+        <p class="teamdash-tagline">Better teams build bigger dreams — everything your team needs, in one place.</p>
+        <div class="teamdash-chips">
+          <span class="teamdash-chip" id="tdCode">Team Code: —</span>
+          <span class="teamdash-chip" id="tdSize">— members</span>
+          <span class="teamdash-chip" id="tdDue" hidden>—</span>
+        </div>
+      </div>
+      <div class="teamdash-header-actions">
+        <select class="teamdash-switcher" id="tdSwitcher" aria-label="Switch team"><option value="">Switch team…</option></select>
+        <button type="button" class="secondary-button" id="tdShareBtn">Share Team Link</button>
+        <a class="secondary-button" id="tdViewProjectBtn" href="#">View Project</a>
+        <button type="button" class="app-gradient-button" id="tdInviteBtn" hidden>Invite Member</button>
+      </div>
+    </header>
+
+    <div id="tdMessage" class="profile-message" role="status"></div>
+
+    <nav class="teamdash-tabs" id="teamdashTabs">
+      <button class="is-active" data-tab="team">Team</button>
+      <button data-tab="project">Project</button>
+      <button data-tab="tasks">Tasks</button>
+      <button data-tab="files">Files</button>
+      <button data-tab="activity">Activity</button>
+    </nav>
+
+    <div class="teamdash-layout">
+      <div class="teamdash-main">
+
+        <section class="teamdash-panel" data-panel="team">
+          <div class="teamdash-panel-head"><h2>Team Members</h2><span class="count-badge" id="tdMemberCount">0</span></div>
+          <div class="teamdash-invite" id="tdInviteForm" hidden>
+            <input type="text" id="tdInviteInput" placeholder="Public ID (PTF-XXXXX) or @username" autocomplete="off">
+            <input type="text" id="tdInviteRole" placeholder="Role (optional)" autocomplete="off">
+            <button type="button" class="primary-button" id="tdInviteSend">Send invitation</button>
+          </div>
+          <div class="teamdash-member-grid" id="tdMembers"><p class="search-empty">Loading members…</p></div>
+        </section>
+
+        <section class="teamdash-panel" data-panel="project" hidden>
+          <div class="teamdash-panel-head"><h2>Project Progress</h2></div>
+          <p class="teamdash-project-desc" id="tdDescription"></p>
+          <div class="myprojects-progress teamdash-overall-progress">
+            <div class="myprojects-progress-head"><span>Overall progress</span><span id="tdProgressLabel">0%</span></div>
+            <div class="myprojects-progress-bar"><span id="tdProgressBar" style="width:0%"></span></div>
+          </div>
+          <p class="teamdash-panel-sub">By phase, based on your team's tasks</p>
+          <div id="tdPhaseBreakdown" class="teamdash-phase-list"></div>
+        </section>
+
+        <section class="teamdash-panel" data-panel="tasks" hidden>
+          <div class="teamdash-panel-head"><h2>Tasks</h2><span class="count-badge" id="tdTaskCount">0</span></div>
+          <form class="teamdash-add-form" id="tdAddTaskForm">
+            <input type="text" id="tdTaskTitle" placeholder="Add a task…" autocomplete="off" required>
+            <select id="tdTaskPhase"></select>
+            <select id="tdTaskAssignee"><option value="">Unassigned</option></select>
+            <button type="submit" class="primary-button">Add Task</button>
+          </form>
+          <div id="tdTasks" class="teamdash-task-list"><p class="search-empty">Loading tasks…</p></div>
+        </section>
+
+        <section class="teamdash-panel" data-panel="files" hidden>
+          <div class="teamdash-panel-head"><h2>Files</h2><span class="count-badge" id="tdFileCount">0</span></div>
+          <div class="teamdash-upload">
+            <input type="file" id="tdFileInput" hidden>
+            <button type="button" class="primary-button" id="tdUploadBtn">Upload a file</button>
+            <span class="teamdash-panel-sub">Documents, images, spreadsheets — up to 20MB.</span>
+          </div>
+          <div id="tdFiles" class="teamdash-file-list"><p class="search-empty">Loading files…</p></div>
+        </section>
+
+        <section class="teamdash-panel" data-panel="activity" hidden>
+          <div class="teamdash-panel-head"><h2>Team Activity</h2></div>
+          <div id="tdActivity" class="teamdash-activity-list"><p class="search-empty">Loading activity…</p></div>
+        </section>
+
+      </div>
+
+      <aside class="teamdash-aside">
+        <div class="findteams-stats-card teamdash-stats-card">
+          <h3>Team Stats</h3>
+          <div class="findteams-stats-grid">
+            <div class="findteams-stat"><strong id="tdStatMembers">—</strong><span>Total Members</span></div>
+            <div class="findteams-stat"><strong id="tdStatInProgress">—</strong><span>Tasks In Progress</span></div>
+            <div class="findteams-stat"><strong id="tdStatDone">—</strong><span>Tasks Completed</span></div>
+            <div class="findteams-stat"><strong id="tdStatProgress">—</strong><span>Project Progress</span></div>
+          </div>
+        </div>
+
+        <div class="findteams-cta-card teamdash-actions-card">
+          <h3>Quick Actions</h3>
+          <div class="teamdash-quick-actions">
+            <button type="button" class="teamdash-quick-action" id="qaInvite" hidden>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.8 19c.6-3.2 3-5 6.2-5s5.6 1.8 6.2 5"/><path d="M18 8v6M15 11h6"/></svg>
+              Invite Member
+            </button>
+            <a class="teamdash-quick-action" id="qaViewProject" href="#">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 6.5a1 1 0 0 1 1-1h4.4l1.6 2h9a1 1 0 0 1 1 1v9.5a1 1 0 0 1-1 1h-15a1 1 0 0 1-1-1v-11.5Z"/></svg>
+              View Project
+            </a>
+            <a class="teamdash-quick-action" href="team-dashboard.html">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2.2"/><path d="M8 21h8M12 17v4"/></svg>
+              All Teams
+            </a>
+            <button type="button" class="teamdash-quick-action" id="qaShare">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.4 10.7 15.6 6.6M8.4 13.3l7.2 4.1"/></svg>
+              Share Team Link
+            </button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+<script src="team-dashboard.js"></script>
+</body></html>

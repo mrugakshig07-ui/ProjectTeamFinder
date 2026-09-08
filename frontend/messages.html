@@ -1,0 +1,133 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Messages · ProjectFinder</title><link rel="stylesheet" href="style.css"><script src="app.js" defer></script></head><body class="messages-page">
+<nav class="navbar"><div class="logo">ProjectFinder</div><div class="nav-links"><a class="nav-primary" href="projects.html">Projects</a><a class="nav-primary" href="members.html">Members</a><button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div></nav>
+<main class="messages-shell">
+  <aside class="conversation-pane">
+    <div class="conversation-pane-head">
+      <h1>Messages</h1>
+      <p>Chat with the people you're connected with.</p>
+    </div>
+    <div class="conversation-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m20 20-4.3-4.3"/></svg><input id="conversationSearch" placeholder="Search conversations…" autocomplete="off"></div>
+    <div class="conversation-items" id="conversationItems"><p class="search-empty">Loading conversations…</p></div>
+  </aside>
+  <section class="chat-pane">
+    <div class="chat-empty" id="chatEmpty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16a1 1 0 0 1 1 1V16a1 1 0 0 1-1 1H9l-4.5 4V17H4a1 1 0 0 1-1-1V6.5a1 1 0 0 1 1-1Z"/></svg>
+      <strong>Select a conversation</strong>
+      <p>Or message someone new from their profile — you can message anyone you're connected with.</p>
+    </div>
+    <div class="chat-active" id="chatActive" hidden>
+      <header class="chat-header" id="chatHeader"></header>
+      <div class="chat-messages" id="chatMessages"></div>
+      <form class="chat-input-row" id="chatForm">
+        <input id="chatInput" placeholder="Type a message…" autocomplete="off" maxlength="4000">
+        <button class="app-gradient-button" type="submit" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M13 6l6 6-6 6"/></svg></button>
+      </form>
+    </div>
+  </section>
+</main>
+<script>
+const $=id=>document.getElementById(id),esc=v=>{const d=document.createElement('div');d.textContent=v==null?'':v;return d.innerHTML};
+async function api(url,o){const r=await fetch(url,o);const d=await r.json().catch(()=>({success:false,message:'The server sent an unreadable response.'}));if(!d.success)throw Error(d.message||'Request failed.');return d}
+
+let conversations=[],activeId=null,pollThread=null,pollList=null,myPublicId='';
+const avatar=p=>p&&p.photo?`<img src="${esc(p.photo)}" alt="">`:`<span>${esc((p&&p.name||'?')[0].toUpperCase())}</span>`;
+const timeLabel=iso=>{const d=new Date(iso),now=new Date();const sameDay=d.toDateString()===now.toDateString();return sameDay?d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}):d.toLocaleDateString([], {month:'short',day:'numeric'})};
+
+function renderConversationList(filter=''){
+  const q=filter.trim().toLowerCase();
+  const rows=conversations.filter(c=>!q||c.profile.name.toLowerCase().includes(q)||c.profile.username.toLowerCase().includes(q));
+  $('conversationItems').innerHTML=rows.length?rows.map((c,i)=>`
+    <button class="conversation-item${c.id===activeId?' is-active':''}${c.unread?' has-unread':''}" data-id="${esc(c.id)}" style="--i:${i%14}">
+      <span class="conversation-avatar">${avatar(c.profile)}</span>
+      <span class="conversation-item-text">
+        <strong>${esc(c.profile.name)}</strong>
+        <span>${c.last_message?(c.last_message_mine?'You: ':'')+esc(c.last_message):'Say hello 👋'}</span>
+      </span>
+      <span class="conversation-item-meta">
+        <span class="conversation-time">${c.last_message_at?timeLabel(c.last_message_at):''}</span>
+        ${c.unread?`<span class="conversation-badge">${c.unread>9?'9+':c.unread}</span>`:''}
+      </span>
+    </button>`).join(''):'<p class="search-empty">No conversations yet. Message a connection from their profile.</p>';
+  $('conversationItems').querySelectorAll('.conversation-item').forEach(btn=>btn.onclick=()=>openConversation(btn.dataset.id));
+}
+
+async function loadConversations(){
+  try{
+    const d=await api('/api/conversations');
+    conversations=d.conversations;
+    renderConversationList($('conversationSearch').value);
+  }catch(e){ $('conversationItems').innerHTML='<p class="search-empty">Could not load conversations.</p>'; }
+}
+
+function messageBubble(m){
+  return `<div class="chat-bubble-row ${m.mine?'is-mine':'is-theirs'}"><div class="chat-bubble">${esc(m.body)}</div><span class="chat-bubble-time">${timeLabel(m.created_at)}</span></div>`;
+}
+
+async function openConversation(id){
+  activeId=id;
+  history.replaceState(null,'','messages.html?conversation='+encodeURIComponent(id));
+  renderConversationList($('conversationSearch').value);
+  $('chatEmpty').hidden=true;$('chatActive').hidden=false;
+  const conv=conversations.find(c=>c.id===id);
+  $('chatHeader').innerHTML=conv?`<a class="chat-header-person" href="member-profile.html?user=${encodeURIComponent(conv.profile.public_id)}"><span class="conversation-avatar">${avatar(conv.profile)}</span><span><strong>${esc(conv.profile.name)}</strong><span>@${esc(conv.profile.username)}</span></span></a>`:'';
+  $('chatMessages').innerHTML='<p class="search-empty">Loading messages…</p>';
+  await loadMessages(true);
+  api('/api/conversations/'+encodeURIComponent(id)+'/read',{method:'PUT'}).then(loadConversations).catch(()=>{});
+  clearInterval(pollThread);
+  pollThread=setInterval(()=>loadMessages(false),3000);
+}
+
+let lastRenderedCount=0;
+async function loadMessages(scrollToEnd){
+  if(!activeId)return;
+  try{
+    const d=await api('/api/conversations/'+encodeURIComponent(activeId)+'/messages');
+    if(d.messages.length===lastRenderedCount && !scrollToEnd)return;
+    lastRenderedCount=d.messages.length;
+    $('chatMessages').innerHTML=d.messages.length?d.messages.map(messageBubble).join(''):'<p class="search-empty">No messages yet. Say hello 👋</p>';
+    $('chatMessages').scrollTop=$('chatMessages').scrollHeight;
+  }catch(e){ /* transient poll failure — keep showing what we have */ }
+}
+
+$('chatForm').onsubmit=async e=>{
+  e.preventDefault();
+  const text=$('chatInput').value.trim();
+  if(!text||!activeId)return;
+  $('chatInput').value='';
+  const optimistic={id:'pending-'+Date.now(),body:text,created_at:new Date().toISOString(),mine:true};
+  $('chatMessages').insertAdjacentHTML('beforeend',messageBubble(optimistic));
+  $('chatMessages').scrollTop=$('chatMessages').scrollHeight;
+  try{
+    await api('/api/conversations/'+encodeURIComponent(activeId)+'/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text})});
+    lastRenderedCount=0; // force a refresh so the real row (and any reply) shows
+    await loadMessages(false);
+    loadConversations();
+  }catch(e){
+    $('chatInput').value=text;
+    alert(e.message||'Could not send that message.');
+  }
+};
+
+$('conversationSearch').oninput=()=>renderConversationList($('conversationSearch').value);
+
+async function init(){
+  const me=await fetch('/api/me').then(r=>r.ok?r.json():null).catch(()=>null);
+  if(!me||!me.success){location.href='login.html';return}
+  myPublicId=me.user.public_id;
+  await loadConversations();
+  const params=new URLSearchParams(location.search);
+  const conversationId=params.get('conversation');
+  const startWith=params.get('start');
+  if(conversationId && conversations.some(c=>c.id===conversationId)) openConversation(conversationId);
+  else if(startWith){
+    try{
+      const d=await api('/api/conversations',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({publicId:startWith})});
+      await loadConversations();
+      openConversation(d.conversationId);
+    }catch(e){ $('conversationItems').insertAdjacentHTML('afterbegin',`<p class="search-empty">${esc(e.message)}</p>`); }
+  }
+  clearInterval(pollList);
+  pollList=setInterval(loadConversations,8000);
+}
+init();
+</script></body></html>

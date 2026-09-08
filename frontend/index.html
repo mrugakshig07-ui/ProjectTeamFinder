@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProjectFinder</title>
+    <link rel="stylesheet" href="style.css"><script src="app.js" defer></script>
+</head>
+<body class="home-page">
+    <nav class="lp-nav">
+        <div class="lp-nav-inner">
+            <a class="lp-logo" href="index.html"><span class="lp-logo-mark">✦</span> ProjectFinder</a>
+
+            <div class="lp-nav-links">
+                <a href="index.html" class="lp-nav-link is-active">Home</a>
+                <a href="projects.html" class="lp-nav-link">Find Teams</a>
+                <a href="my-projects.html" class="lp-nav-link">My Projects</a>
+                <a href="members.html" class="lp-nav-link">Members</a>
+                <a href="#about" class="lp-nav-link">About</a>
+            </div>
+
+            <div class="lp-nav-search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m20 20-4.3-4.3"/></svg>
+                <input type="search" id="lpSearchInput" placeholder="Search for teams, projects or people..." autocomplete="off">
+                <div class="lp-search-results" id="lpSearchResults" hidden></div>
+            </div>
+
+            <div class="lp-nav-actions" id="lpNavActions">
+                <a href="login.html" class="lp-login-link">Login</a>
+                <a href="register.html" class="lp-signup-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.8 19c.6-3.2 3-5 6.2-5s5.6 1.8 6.2 5"/><path d="M18 8v6M15 11h6"/></svg>Sign Up</a>
+            </div>
+
+            <button class="lp-menu-toggle" id="lpMenuToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+        </div>
+        <div class="lp-mobile-menu" id="lpMobileMenu" hidden>
+            <a href="index.html">Home</a>
+            <a href="projects.html">Find Teams</a>
+            <a href="my-projects.html">My Projects</a>
+            <a href="members.html">Members</a>
+            <a href="#about">About</a>
+            <div class="lp-mobile-search">
+                <input type="search" id="lpSearchInputMobile" placeholder="Search for teams, projects or people..." autocomplete="off">
+            </div>
+            <div class="lp-mobile-actions" id="lpMobileActions">
+                <a href="login.html" class="lp-login-link">Login</a>
+                <a href="register.html" class="lp-signup-btn">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="lp-main">
+        <section class="lp-hero">
+            <div class="lp-hero-bg" aria-hidden="true"></div>
+            <div class="lp-hero-inner">
+
+                <div class="lp-hero-text">
+                    <span class="lp-doodle lp-doodle-create" aria-hidden="true">Create.<br>Collaborate.<br>Grow.</span>
+                    <span class="lp-pill">✨ Your Ideas&nbsp; +&nbsp; The Right People&nbsp; =&nbsp; Something Amazing</span>
+                    <h1>Build your dream<br><span class="lp-accent">team &amp; project</span> together. <span class="lp-heart">♡</span></h1>
+                    <p>Find teammates, join exciting projects, and turn your ideas into reality. Connect, collaborate and grow — all in one place.</p>
+                    <div class="lp-hero-actions">
+                        <a href="projects.html" class="lp-btn-primary">Find Teams <span>→</span></a>
+                        <a href="post-project.html" class="lp-btn-secondary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>Create a Project</a>
+                    </div>
+                    <ul class="lp-benefits">
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5 9 17l10.5-10.5"/></svg>Meet like-minded people</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5 9 17l10.5-10.5"/></svg>Work on real projects</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5 9 17l10.5-10.5"/></svg>Build your future</li>
+                    </ul>
+                </div>
+
+                <div class="lp-hero-visual">
+                    <span class="lp-doodle lp-doodle-together" aria-hidden="true">Better<br>Together <span class="lp-heart">♡</span></span>
+
+                    <div class="lp-preview-card">
+                        <div class="lp-preview-top">
+                            <span class="lp-preview-logo"><span class="lp-logo-mark">✦</span> ProjectFinder</span>
+                            <span class="lp-preview-icons"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 4.2 1.2 5.6 2 6.6H4c.8-1 2-2.4 2-6.6Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></span>
+                        </div>
+                        <p class="lp-preview-welcome" id="lpPreviewWelcome">Live on ProjectFinder</p>
+                        <p class="lp-preview-sub">Real-time snapshot of what's happening right now</p>
+                        <div class="lp-preview-stats">
+                            <div><strong id="lpStatTeams">—</strong><span>Active Teams</span></div>
+                            <div><strong id="lpStatMembers">—</strong><span>Members</span></div>
+                            <div><strong id="lpStatProjects">—</strong><span>Projects Posted</span></div>
+                            <div><strong id="lpStatOnline">—</strong><span>Online Now</span></div>
+                        </div>
+                        <p class="lp-preview-label">Featured Teams</p>
+                        <div class="lp-preview-teams" id="lpPreviewTeams">
+                            <p class="lp-preview-loading">Loading…</p>
+                        </div>
+                    </div>
+
+                    <div class="lp-avatar-cluster">
+                        <div class="lp-avatar-stack" id="lpAvatarStack"></div>
+                        <span class="lp-doodle lp-doodle-people" aria-hidden="true">Find your<br>people <span class="lp-heart">♥</span></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="lp-features" id="about">
+            <div class="lp-feature">
+                <span class="lp-feature-icon lp-feature-icon-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.8 19c.6-3.2 3-5 6.2-5s5.6 1.8 6.2 5"/><circle cx="17" cy="7.5" r="2.4"/><path d="M15.6 11.3c2.6.2 4.4 1.9 4.9 4.6"/></svg></span>
+                <h3>Find the Right People</h3>
+                <p>Connect with talented individuals who share your interests.</p>
+            </div>
+            <div class="lp-feature">
+                <span class="lp-feature-icon lp-feature-icon-mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.2 6.8L21 11l-6.8 2.2L12 20l-2.2-6.8L3 11l6.8-2.2L12 2z"/></svg></span>
+                <h3>Join Exciting Projects</h3>
+                <p>Be part of creative and innovative teams working on real ideas.</p>
+            </div>
+            <div class="lp-feature">
+                <span class="lp-feature-icon lp-feature-icon-lavender"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="12" r="3.4"/><circle cx="17" cy="12" r="3.4"/><path d="M10.2 12h3.6"/></svg></span>
+                <h3>Build Your Network</h3>
+                <p>Grow your connections and open new opportunities.</p>
+            </div>
+            <div class="lp-feature">
+                <span class="lp-feature-icon lp-feature-icon-peach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 3.5c3 0 6 3 6 6-3.5 1-6.5 3-9 6l-3-3c3-2.5 5-5.5 6-9Z"/><path d="M9.5 14 6 17.5M4 20l1.5-3.5L8 19 4 20Z"/><circle cx="15.5" cy="8.5" r="1.5"/></svg></span>
+                <h3>Achieve More Together</h3>
+                <p>Turn ideas into impact with the right team by your side.</p>
+            </div>
+        </section>
+
+        <p class="lp-trust"><span class="lp-heart">♥</span> Trusted by creators, learners and dreamers <span class="lp-heart">♥</span></p>
+
+        <section class="lp-selected">
+            <div class="lp-selected-label"><span></span> Selected opportunity</div>
+            <div class="project-card" id="featuredCard">
+                <div class="project-top"><span class="project-tag">Loading…</span></div>
+                <h2>Loading the latest project…</h2>
+                <p>Hang tight while we pull the newest listing.</p>
+            </div>
+        </section>
+
+        <section class="my-projects-section" id="myProjectsSection" hidden>
+            <div class="feed-heading">
+                <div>
+                    <p class="profile-label">YOUR STUDIO</p>
+                    <h2>Projects you created</h2>
+                </div>
+                <a href="post-project.html" class="secondary-button">Create another <span>→</span></a>
+            </div>
+            <div class="feed-grid" id="myProjectsGrid"></div>
+        </section>
+
+        <section class="feed-section" id="feed">
+            <div class="feed-heading">
+                <div>
+                    <p class="profile-label">BROWSE</p>
+                    <h2>Projects looking for teammates</h2>
+                </div>
+                <a href="post-project.html" class="secondary-button">+ Post a project</a>
+            </div>
+            <div class="feed-grid" id="feedGrid">
+                <p class="feed-empty">Loading projects…</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function timeAgo(dateString) {
+            const seconds = Math.floor((Date.now() - new Date(dateString).getTime()) / 1000);
+            const units = [["year", 31536000], ["month", 2592000], ["day", 86400], ["hour", 3600], ["minute", 60]];
+            for (const [name, secs] of units) { const value = Math.floor(seconds / secs); if (value >= 1) return `${value} ${name}${value > 1 ? "s" : ""} ago`; }
+            return "just now";
+        }
+
+        function skillTags(skills) { return (skills || "").split(",").map(s => s.trim()).filter(Boolean).slice(0, 4).map(s => `<span>${escapeHtml(s)}</span>`).join(""); }
+        function escapeHtml(text) { const div = document.createElement("div"); div.textContent = text; return div.innerHTML; }
+
+        function renderCard(project, { featured = false, index = 0 } = {}) {
+            const profile = project.profiles || {};
+            const author = profile.name || "A ProjectFinder member";
+            const description = project.description ? escapeHtml(project.description) : "No description provided yet.";
+            const creator = profile.public_id
+                ? `<a class="project-creator" href="member-profile.html?user=${encodeURIComponent(profile.public_id)}"><span class="creator-avatar">${profile.photo ? `<img src="${escapeHtml(profile.photo)}" alt="">` : escapeHtml(author.charAt(0).toUpperCase())}</span><span><small>Created by</small><strong>${escapeHtml(author)}</strong></span></a>`
+                : `<span class="project-creator"><span class="creator-avatar">${escapeHtml(author.charAt(0).toUpperCase())}</span><span><small>Created by</small><strong>${escapeHtml(author)}</strong></span></span>`;
+            return `<div class="project-card" style="--reveal-index:${index}">
+                <div class="project-top"><span class="project-tag">${escapeHtml(project.category || "PROJECT")}</span><span class="members">${escapeHtml(project.status || "Open")}</span></div>
+                <h2>${escapeHtml(project.title)}</h2>
+                <p>${description}</p>
+                ${project.skills ? `<div class="skills">${skillTags(project.skills)}</div>` : ""}
+                <div class="project-footer">${creator}<span class="project-meta">${timeAgo(project.created_at)}</span></div>
+                ${project.link ? `<a class="primary-button" href="${escapeHtml(project.link)}" target="_blank" rel="noopener">View project →</a>` : `<button disabled>No link shared yet</button>`}
+            </div>`;
+        }
+
+        let latestProjects = [];
+
+        async function loadProjects() {
+            const grid = document.getElementById("feedGrid"), featured = document.getElementById("featuredCard");
+            let response, data;
+            try {
+                response = await fetch("/api/projects");
+                data = await response.json();
+            } catch (error) {
+                grid.innerHTML = `<p class="feed-empty">Can't reach the server right now. Make sure it's running and refresh the page.</p>`;
+                featured.innerHTML = `<div class="project-top"><span class="project-tag">OFFLINE</span></div><h2>Can't load projects</h2><p>Check your connection and refresh.</p>`;
+                return;
+            }
+            if (!data.success || !data.projects.length) {
+                grid.innerHTML = `<p class="feed-empty">No projects yet — be the first to <a href="post-project.html">post one</a>.</p>`;
+                featured.innerHTML = `<div class="project-top"><span class="project-tag">GET STARTED</span></div><h2>No projects yet</h2><p>Be the first to share what you're building and find a team.</p><a class="primary-button" href="post-project.html" style="display:block;text-align:center;text-decoration:none;">Post the first project →</a>`;
+                return;
+            }
+            latestProjects = data.projects;
+            featured.outerHTML = renderCard(data.projects[0], { featured: true, index: 0 }).replace('class="project-card"', 'class="project-card" id="featuredCard"');
+            grid.innerHTML = data.projects.map((project, index) => renderCard(project, { index })).join("");
+        }
+
+        async function loadMyProjects(user) {
+            try {
+                const response = await fetch('/api/profile/projects');
+                const data = await response.json();
+                if (!response.ok || !data.success) return;
+                const created = [...data.current, ...data.completed].filter(project => project.can_manage);
+                if (!created.length) return;
+                const grid = document.getElementById('myProjectsGrid');
+                grid.innerHTML = created.map((project, index) => renderCard({
+                    ...project,
+                    profiles: { name: user.name, public_id: user.public_id, photo: user.photo }
+                }, { index })).join('');
+                document.getElementById('myProjectsSection').hidden = false;
+            } catch (_) {
+                // The community feed remains available if private projects cannot load.
+            }
+        }
+
+        // ---- Real, signed-in-aware navigation ----
+        async function updateNavigation() {
+            try {
+                const response = await fetch("/api/me");
+                const data = await response.json();
+                if (!response.ok || !data.success) return;
+
+                loadMyProjects(data.user);
+                renderSignedInNav(data.user);
+            } catch (_) {
+                // Keep the signed-out navigation if the server is unavailable.
+            }
+        }
+
+        function avatarMarkup(user) {
+            return user.photo ? `<img src="${escapeHtml(user.photo)}" alt="">` : escapeHtml((user.name || "?").charAt(0).toUpperCase());
+        }
+
+        function renderSignedInNav(user) {
+            const welcome = document.getElementById('lpPreviewWelcome');
+            if (welcome) welcome.textContent = `Welcome back, ${user.name.split(' ')[0]}!`;
+
+            const signedInMarkup = (compact) => `
+                <a class="lp-icon-link" href="notifications.html" title="Notifications" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 4.2 1.2 5.6 2 6.6H4c.8-1 2-2.4 2-6.6Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></a>
+                <a class="lp-avatar-link${compact ? ' lp-avatar-link-compact' : ''}" href="profile.html" title="My profile">${avatarMarkup(user)}</a>`;
+
+            const actions = document.getElementById('lpNavActions');
+            if (actions) actions.innerHTML = signedInMarkup(false);
+            const mobileActions = document.getElementById('lpMobileActions');
+            if (mobileActions) mobileActions.innerHTML = `<a href="profile.html">My Profile</a><a href="notifications.html">Notifications</a>`;
+        }
+
+        // ---- Real platform pulse for the floating preview ----
+        async function loadPreviewStats() {
+            try {
+                const [teamsRes, membersRes] = await Promise.all([fetch('/api/teams/stats'), fetch('/api/members/stats')]);
+                const [teams, members] = await Promise.all([teamsRes.json(), membersRes.json()]);
+                if (teams.success) {
+                    document.getElementById('lpStatTeams').textContent = teams.stats.active_teams;
+                    document.getElementById('lpStatProjects').textContent = teams.stats.projects_started;
+                }
+                if (members.success) {
+                    document.getElementById('lpStatMembers').textContent = members.stats.total_members;
+                    document.getElementById('lpStatOnline').textContent = members.stats.online_now;
+                }
+            } catch (_) {
+                ['lpStatTeams', 'lpStatMembers', 'lpStatProjects', 'lpStatOnline'].forEach(id => document.getElementById(id).textContent = '—');
+            }
+        }
+
+        function bannerTone(id) {
+            const tones = ['lp-team-tone-a', 'lp-team-tone-b', 'lp-team-tone-c'];
+            let hash = 0; for (const ch of String(id)) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
+            return tones[hash % tones.length];
+        }
+
+        function previewTeamCard(project) {
+            const avatars = (project.member_avatars || []).slice(0, 3);
+            return `<div class="lp-preview-team ${bannerTone(project.id)}">
+                <div class="lp-preview-team-top">
+                    <span class="lp-preview-team-avatars">${avatars.map(a => a.photo ? `<img src="${escapeHtml(a.photo)}" alt="">` : `<span>${escapeHtml((a.name || '?').charAt(0).toUpperCase())}</span>`).join('')}</span>
+                </div>
+                <strong>${escapeHtml(project.title)}</strong>
+                <span class="lp-preview-team-size">${project.team_size} member${project.team_size === 1 ? '' : 's'}</span>
+                <span class="lp-preview-join">Join</span>
+            </div>`;
+        }
+
+        async function loadPreviewTeams() {
+            try {
+                const response = await fetch('/api/projects/discover?page=0');
+                const data = await response.json();
+                const container = document.getElementById('lpPreviewTeams');
+                if (!data.success || !data.projects.length) { container.innerHTML = '<p class="lp-preview-loading">No teams yet — be the first to post one.</p>'; return; }
+                container.innerHTML = data.projects.slice(0, 3).map(previewTeamCard).join('');
+            } catch (_) {
+                document.getElementById('lpPreviewTeams').innerHTML = '<p class="lp-preview-loading">Could not load teams.</p>';
+            }
+        }
+
+        // ---- Real recent members for the "Find your people" avatar cluster ----
+        async function loadAvatarCluster() {
+            try {
+                const response = await fetch('/api/members?sort=newest&page=0');
+                const data = await response.json();
+                const stack = document.getElementById('lpAvatarStack');
+                if (!data.success || !data.members.length) { stack.hidden = true; return; }
+                const shown = data.members.slice(0, 4);
+                stack.innerHTML = shown.map(m => `<span class="lp-avatar-item">${m.photo ? `<img src="${escapeHtml(m.photo)}" alt="">` : escapeHtml((m.name || '?').charAt(0).toUpperCase())}</span>`).join('')
+                    + `<a class="lp-avatar-item lp-avatar-more" href="members.html">+</a>`;
+            } catch (_) {
+                document.getElementById('lpAvatarStack').hidden = true;
+            }
+        }
+
+        // ---- Real search, reusing the same endpoints the signed-in app shell uses ----
+        function searchPersonRow(p) {
+            const initial = escapeHtml((p.name || '?').charAt(0).toUpperCase());
+            return `<a class="lp-search-row" href="member-profile.html?user=${encodeURIComponent(p.public_id)}">
+                <span class="lp-search-avatar">${p.photo ? `<img src="${escapeHtml(p.photo)}" alt="">` : initial}</span>
+                <span class="lp-search-row-text"><strong>${escapeHtml(p.name)}</strong><span>@${escapeHtml(p.username)} · ${escapeHtml(p.role_title || 'Member')}</span></span>
+            </a>`;
+        }
+        function searchProjectRow(p) {
+            return `<a class="lp-search-row" href="project.html?id=${encodeURIComponent(p.id)}">
+                <span class="lp-search-avatar lp-search-avatar-project"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/></svg></span>
+                <span class="lp-search-row-text"><strong>${escapeHtml(p.title)}</strong><span>${escapeHtml(p.category || 'Project')} · ${escapeHtml(p.status)}</span></span>
+            </a>`;
+        }
+        async function runSearch(q) {
+            const results = document.getElementById('lpSearchResults');
+            results.innerHTML = '<div class="lp-search-loading">Searching…</div>';
+            results.hidden = false;
+            try {
+                const [membersRes, projectsRes] = await Promise.all([
+                    fetch('/api/members?q=' + encodeURIComponent(q) + '&page=0').then(r => r.json()).catch(() => null),
+                    fetch('/api/projects/discover?q=' + encodeURIComponent(q) + '&page=0').then(r => r.json()).catch(() => null)
+                ]);
+                const people = membersRes && membersRes.success ? membersRes.members.slice(0, 4) : [];
+                const projectHits = projectsRes && projectsRes.success ? projectsRes.projects.slice(0, 4) : [];
+                if (!people.length && !projectHits.length) { results.innerHTML = `<div class="lp-search-empty">No matches for "${escapeHtml(q)}".</div>`; return; }
+                results.innerHTML = `
+                    ${people.length ? `<div class="lp-search-group"><p>People</p>${people.map(searchPersonRow).join('')}</div>` : ''}
+                    ${projectHits.length ? `<div class="lp-search-group"><p>Projects</p>${projectHits.map(searchProjectRow).join('')}</div>` : ''}`;
+            } catch (_) {
+                results.innerHTML = '<div class="lp-search-empty">Search is unavailable right now.</div>';
+            }
+        }
+        let searchTimer;
+        const searchInput = document.getElementById('lpSearchInput');
+        searchInput.addEventListener('input', () => {
+            clearTimeout(searchTimer);
+            const q = searchInput.value.trim();
+            const results = document.getElementById('lpSearchResults');
+            if (!q) { results.hidden = true; results.innerHTML = ''; return; }
+            searchTimer = setTimeout(() => runSearch(q), 260);
+        });
+        document.addEventListener('click', e => { if (!e.target.closest('.lp-nav-search')) document.getElementById('lpSearchResults').hidden = true; });
+
+        // ---- Mobile menu toggle (no existing handler wired this up before) ----
+        const menuToggle = document.getElementById('lpMenuToggle');
+        const mobileMenu = document.getElementById('lpMobileMenu');
+        menuToggle.addEventListener('click', () => {
+            const open = mobileMenu.hidden;
+            mobileMenu.hidden = !open;
+            menuToggle.classList.toggle('is-open', open);
+            menuToggle.setAttribute('aria-expanded', String(open));
+        });
+
+        loadProjects();
+        updateNavigation();
+        loadPreviewStats();
+        loadPreviewTeams();
+        loadAvatarCluster();
+    </script>
+</body>
+</html>

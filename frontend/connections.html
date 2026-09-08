@@ -1,0 +1,90 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Connections · ProjectFinder</title><link rel="stylesheet" href="style.css"><script src="app.js" defer></script><script src="ui.js"></script></head><body class="connections-page">
+<nav class="navbar"><div class="logo">ProjectFinder</div><div class="nav-links"><a class="nav-primary" href="projects.html">Projects</a><a class="nav-primary" href="members.html">Members</a><button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div></nav>
+<main class="conn-shell">
+
+  <header class="conn-hero">
+    <span class="conn-doodle conn-doodle-left">Build<br>Your Circle <span class="conn-heart">♡</span></span>
+    <span class="conn-doodle conn-doodle-right">Better<br>Together <span class="conn-heart">♡</span></span>
+    <p class="profile-label">NETWORK</p>
+    <h1>Connections</h1>
+    <p class="team-intro">People you've connected with, and requests waiting on a reply.</p>
+  </header>
+
+  <div id="message" class="profile-message" role="status"></div>
+
+  <div class="conn-layout">
+    <div class="conn-main">
+
+      <nav class="conn-tabs" id="connTabs">
+        <button class="is-active" data-tab="all">All Connections <span class="count-badge" id="tabAllCount">0</span></button>
+        <button data-tab="requests">Requests <span class="count-badge" id="tabReqCount">0</span></button>
+        <button data-tab="suggestions">Suggestions <span class="count-badge" id="tabSugCount">0</span></button>
+        <label class="conn-sort">Sort by
+          <select id="sortSelect"><option value="recent">Recent</option><option value="name">Name A-Z</option></select>
+        </label>
+      </nav>
+
+      <section class="conn-panel" data-panel="all requests">
+        <div class="conn-panel-head">
+          <span class="conn-panel-icon conn-panel-icon-requests"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.8 19c.6-3.2 3-5 6.2-5s5.6 1.8 6.2 5"/><circle cx="17" cy="7.5" r="2.4"/><path d="M15.6 11.3c2.6.2 4.4 1.9 4.9 4.6"/></svg></span>
+          <div class="conn-panel-title"><h2>Connection requests</h2><span class="count-badge" id="reqCount">0</span></div>
+          <button type="button" class="text-button conn-viewall" data-viewall="requestsGrid">View all →</button>
+        </div>
+        <p class="conn-panel-hint">People who want to connect with you.</p>
+        <div id="requestsGrid" class="conn-card-grid"><p class="search-empty">Loading requests…</p></div>
+      </section>
+
+      <section class="conn-panel conn-panel-sent" data-panel="all requests">
+        <div class="conn-panel-head">
+          <span class="conn-panel-icon conn-panel-icon-sent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 20 4l-4.5 16-4-7-7-1Z"/></svg></span>
+          <div class="conn-panel-title"><h2>Requests you sent</h2><span class="count-badge" id="sentCount">0</span></div>
+          <button type="button" class="text-button conn-viewall" data-viewall="sentGrid">View all →</button>
+        </div>
+        <p class="conn-panel-hint">People you've sent a connection request to.</p>
+        <div id="sentGrid" class="conn-card-grid"><p class="search-empty">Loading sent requests…</p></div>
+      </section>
+
+      <section class="conn-panel" data-panel="all">
+        <div class="conn-panel-head">
+          <span class="conn-panel-icon conn-panel-icon-connections"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="12" r="3.4"/><circle cx="17" cy="12" r="3.4"/><path d="M10.2 12h3.6"/></svg></span>
+          <div class="conn-panel-title"><h2>My connections</h2><span class="count-badge" id="connCount">0</span></div>
+          <button type="button" class="text-button conn-viewall" data-viewall="connAvatars">View all →</button>
+        </div>
+        <div id="connAvatars" class="conn-avatar-row"><p class="search-empty">Loading connections…</p></div>
+      </section>
+
+      <section class="conn-panel" data-panel="suggestions" hidden>
+        <div class="conn-panel-head">
+          <span class="conn-panel-icon conn-panel-icon-suggest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.2 6.8L21 11l-6.8 2.2L12 20l-2.2-6.8L3 11l6.8-2.2L12 2z"/></svg></span>
+          <div class="conn-panel-title"><h2>Suggested for you</h2><span class="count-badge" id="sugTabCount">0</span></div>
+        </div>
+        <p class="conn-panel-hint">Real ProjectFinder members who share your skills.</p>
+        <div id="suggestionsGrid" class="conn-card-grid"><p class="search-empty">Loading suggestions…</p></div>
+      </section>
+
+    </div>
+
+    <aside class="conn-aside">
+      <div class="findteams-stats-card conn-stats-card">
+        <h3>Your Network</h3>
+        <p class="conn-stats-hint">More connections, more opportunities!</p>
+        <div class="findteams-stats-grid">
+          <div class="findteams-stat"><strong id="statTotal">—</strong><span>Total Connections</span></div>
+          <div class="findteams-stat"><strong id="statPending">—</strong><span>Pending Requests</span></div>
+          <div class="findteams-stat"><strong id="statSuggestions">—</strong><span>Suggestions</span></div>
+          <div class="findteams-stat"><strong id="statTeams">—</strong><span>Teams Joined</span></div>
+        </div>
+      </div>
+
+      <div class="findteams-cta-card conn-suggested-card">
+        <div class="conn-suggested-head"><h3>Suggested for you</h3><button type="button" class="text-button" data-seeall>See all →</button></div>
+        <div id="suggestedSidebar" class="conn-suggested-list"><p class="search-empty">Loading…</p></div>
+      </div>
+
+      <div class="conn-tip-card">
+        <span class="conn-tip-icon">💡</span>
+        <div><strong>Pro Tip</strong><p>Connect with people in your field, join their teams, and grow your opportunities!</p></div>
+      </div>
+    </aside>
+  </div>
+</main><script src="connections.js"></script></body></html>

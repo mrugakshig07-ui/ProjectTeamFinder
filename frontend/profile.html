@@ -1,0 +1,142 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>My Profile · ProjectFinder</title><link rel="stylesheet" href="style.css"><script src="app.js" defer></script></head><body class="profile-page">
+<nav class="navbar"><div class="logo">ProjectFinder</div><div class="nav-links"><a class="nav-primary" href="projects.html">Projects</a><a class="nav-primary" href="members.html">Members</a><button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div></nav>
+<main class="identity-container"><header class="identity-header"><div class="avatar-xl" id="avatar">👤</div><div class="identity-meta"><div class="identity-name-row"><h1 id="displayName">Loading…</h1><span class="public-id-chip" id="publicIdChip"></span></div><div class="identity-username">@<span id="username"></span></div><div class="role-title-text" id="roleTitle"></div><p class="identity-bio" id="bioText"></p><div class="identity-social" id="socialRow"></div><div class="identity-actions"><button class="secondary-button" id="editToggle">Edit Profile</button><a class="secondary-button" href="settings.html">Settings</a></div></div></header>
+<section class="profile-stats"><a href="followers.html" style="--i:0"><strong id="followersCount">—</strong><span>Followers</span></a><a href="following.html" style="--i:1"><strong id="followingCount">—</strong><span>Following</span></a><div style="--i:2"><strong id="projectsJoined">—</strong><span>Projects joined</span></div><div style="--i:3"><strong id="currentCount">—</strong><span>Current projects</span></div><div style="--i:4"><strong id="completedCount">—</strong><span>Completed projects</span></div><div style="--i:5"><strong id="teamsJoined">—</strong><span>Teams joined</span></div><div style="--i:6"><strong id="teamsCreated">—</strong><span>Teams created</span></div><div style="--i:7"><strong id="skillsCount">—</strong><span>Skills</span></div><div style="--i:8"><strong id="ratingValue">—</strong><span>Rating</span></div></section>
+
+<section class="edit-profile-card" id="editPanel" hidden>
+  <div class="edit-profile-head">
+    <button type="button" class="edit-back-link" id="editBack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m11 5-7 7 7 7M4 12h16"/></svg>Back to Profile</button>
+    <h1>Edit Your Profile</h1>
+    <p>Tell the world who you are and what you do.</p>
+  </div>
+  <div class="edit-profile-grid">
+    <div class="edit-profile-main">
+      <div class="photo-upload-card">
+        <div class="photo-upload-ring"><div class="profile-photo" id="profilePhoto">👤</div><label class="photo-edit-dot" for="photoFile" title="Change photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5V19a1 1 0 0 0 1 1h3.5L18 10.5a2 2 0 0 0 0-3l-1.5-1.5a2 2 0 0 0-3 0L4 15.5Z"/></svg></label></div>
+        <div class="photo-upload-info">
+          <strong>Profile Photo</strong>
+          <p>Upload a clear photo of yourself</p>
+          <div class="photo-upload-actions">
+            <label class="app-gradient-button" for="photoFile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>Upload Photo</label>
+            <button type="button" id="removePhoto" class="text-button">Remove</button>
+          </div>
+          <input type="file" id="photoFile" accept="image/png,image/jpeg,image/webp" hidden>
+          <small>JPG, PNG, or WebP · Max 5MB</small>
+        </div>
+      </div>
+      <form id="profileForm" class="icon-field-form">
+        <div class="field-row">
+          <label>Full Name <span class="req">*</span><span class="icon-field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M4.8 20c.8-3.6 3.4-5.6 7.2-5.6s6.4 2 7.2 5.6"/></svg><input id="name" required></span></label>
+          <label>Username <span class="req">*</span><span class="icon-field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M15.8 12v1.5a2.5 2.5 0 0 0 5 0V12a8.8 8.8 0 1 0-3.5 7"/></svg><input id="usernameInput" pattern="[a-z0-9_]{3,20}" required><span class="field-status" id="usernameStatus" hidden></span></span></label>
+        </div>
+        <label>Role / Title<span class="icon-field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="7.5" width="17" height="12" rx="2"/><path d="M8.5 7.5V6a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v1.5M3.5 13h17"/></svg><input id="roleTitleInput" placeholder="e.g. Product Designer"></span></label>
+        <label>Bio<span class="icon-field icon-field-area"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5h11l3 3V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5.5a1 1 0 0 1 1-1Z"/><path d="M8 10h8M8 14h5"/></svg><textarea id="bio" rows="3" placeholder="Tell people what you do and what you're looking for."></textarea></span><span class="field-count" id="bioCount">0 characters</span></label>
+        <div class="field-row">
+          <label>LinkedIn<span class="icon-field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="3"/><path d="M8 10.5V16M8 7.8v.02M12.2 16v-3.4a1.9 1.9 0 0 1 3.8 0V16"/></svg><input type="url" id="linkedin" placeholder="https://linkedin.com/in/…"></span></label>
+          <label>GitHub<span class="icon-field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 0 0-2.85 17.54c.45.08.6-.2.6-.43v-1.68c-2.5.55-3.03-1.13-3.03-1.13-.41-1.04-1-1.32-1-1.32-.82-.56.06-.55.06-.55.9.06 1.38.93 1.38.93.8 1.38 2.11.98 2.63.75.08-.58.32-.98.57-1.21-2-.23-4.1-1-4.1-4.45 0-.98.35-1.79.92-2.42-.09-.23-.4-1.15.09-2.4 0 0 .75-.24 2.45.92a8.4 8.4 0 0 1 4.46 0c1.7-1.16 2.45-.92 2.45-.92.49 1.25.18 2.17.09 2.4.57.63.92 1.44.92 2.42 0 3.46-2.1 4.22-4.1 4.44.33.29.62.85.62 1.72v2.55c0 .24.15.51.61.43A9 9 0 0 0 12 3Z"/></svg><input type="url" id="github" placeholder="https://github.com/…"></span></label>
+        </div>
+        <div class="field-row">
+          <label>Portfolio<span class="icon-field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 14.5 14.5 9.5M11 8l1-1a3 3 0 0 1 4.2 4.2l-1 1M13 16l-1 1A3 3 0 0 1 7.8 12.8l1-1"/></svg><input type="url" id="portfolio" placeholder="https://…"></span></label>
+          <label>Other website<span class="icon-field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.2 2.3 3.4 5.3 3.4 8.5s-1.2 6.2-3.4 8.5c-2.2-2.3-3.4-5.3-3.4-8.5S9.8 5.8 12 3.5Z"/></svg><input type="url" id="otherWebsite" placeholder="https://…"></span></label>
+        </div>
+        <button class="app-gradient-button save-profile-button">Save Profile<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </form>
+      <p class="edit-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg>Make sure all details are correct. You can always come back and edit later.</p>
+    </div>
+    <aside class="edit-profile-side">
+      <div class="mini-profile-card" id="miniProfileCard"></div>
+      <div class="completion-card" id="completionCard"></div>
+    </aside>
+  </div>
+</section>
+
+<div id="profileMessage" class="profile-message" role="status"></div>
+<section class="profile-detail-section"><div class="section-heading"><h2>Education</h2><button class="secondary-button" id="showEducation">Add education</button></div><form id="educationForm" class="inline-form" hidden><input id="educationId" type="hidden"><label>Institution<input id="institution" required></label><label>Degree / course<input id="degreeCourse"></label><label>Field of study<input id="fieldOfStudy"></label><label>Start year<input id="startYear" type="number" min="1900" max="2200"></label><label>End year<input id="endYear" type="number" min="1900" max="2200"></label><label class="checkbox-label"><input id="currentlyStudying" type="checkbox"> Currently studying</label><button class="primary-button">Save education</button><button type="button" class="secondary-button" id="cancelEducation">Cancel</button></form><div id="educationList" class="education-list">Loading…</div></section>
+<section class="profile-detail-section"><h2>Skills</h2><div class="skill-picker"><input id="skillInput" placeholder="Search or add a skill" maxlength="60"><button class="secondary-button" id="addSkill">Add</button><div id="skillSuggestions" class="skill-suggestions"></div></div><div class="identity-skills" id="skillsRow">Loading…</div></section>
+<div class="identity-tabs"><button class="is-active" data-tab="current">Current Projects</button><button data-tab="completed">Completed Projects</button></div><div class="tab-panel is-active" id="tab-current"><div class="identity-project-grid" id="currentGrid">Loading…</div></div><div class="tab-panel" id="tab-completed"><div class="identity-project-grid" id="completedGrid">Loading…</div></div></main>
+<script>
+const $=id=>document.getElementById(id),esc=v=>{let d=document.createElement('div');d.textContent=v||'';return d.innerHTML};let userSkills=[],myPublicId='',myUsername='',latestProfile=null;
+const msg=(t,k='')=>{$('profileMessage').textContent=t;$('profileMessage').className='profile-message is-visible '+(k==='error'?'is-error':k==='success'?'is-success':'')};
+async function api(url,o){let r=await fetch(url,o),d=await r.json();if(!d.success)throw Error(d.message||'Request failed.');return d}
+function avatar(name,photo){return photo?`<img src="${esc(photo)}" alt="Profile photo">`:`<div class="initial-avatar">${esc((name||'?')[0].toUpperCase())}</div>`}
+function social(u){$('socialRow').innerHTML=[['LinkedIn',u.linkedin],['GitHub',u.github],['Portfolio',u.portfolio],['Website',u.other_website]].filter(x=>x[1]).map(x=>`<a href="${esc(x[1])}" target="_blank" rel="noopener" title="${x[0]}">${x[0]}</a>`).join('')}
+
+// ---- mini profile card + completion checklist (right rail of the edit form) ----
+function renderMiniProfile(u,stats){
+  $('miniProfileCard').innerHTML=`
+    <div class="mini-profile-top">
+      <span class="mini-profile-avatar">${avatar(u.name,u.photo)}</span>
+      <div><strong>${esc(u.name)}</strong><span>@${esc(u.username)}</span></div>
+    </div>
+    ${u.role_title?`<span class="mini-profile-role">${esc(u.role_title)}</span>`:''}
+    <p class="mini-profile-bio">${esc(u.bio||'No bio yet.')}</p>
+    <div class="mini-profile-stats">
+      <div><strong>${stats.projects_joined??'—'}</strong><span>Projects</span></div>
+      <div><strong>${stats.followers??'—'}</strong><span>Followers</span></div>
+      <div><strong>${stats.following??'—'}</strong><span>Following</span></div>
+    </div>
+    ${userSkills.length?`<div class="mini-profile-skills">${userSkills.slice(0,3).map(s=>`<span class="chip">${esc(s.name)}</span>`).join('')}${userSkills.length>3?`<span class="chip chip-more">+${userSkills.length-3}</span>`:''}</div>`:''}`;
+}
+function renderCompletion(u){
+  const items=[
+    ['Basic Information', Boolean(u.name&&u.username)],
+    ['Bio', Boolean(u.bio&&u.bio.trim())],
+    ['Profile Photo', Boolean(u.photo)],
+    ['Skills', userSkills.length>0],
+    ['LinkedIn', Boolean(u.linkedin)],
+    ['GitHub', Boolean(u.github)],
+    ['Portfolio', Boolean(u.portfolio)],
+    ['Other Website', Boolean(u.other_website)]
+  ];
+  const done=items.filter(x=>x[1]).length;
+  const pct=Math.round(done/items.length*100);
+  $('completionCard').innerHTML=`
+    <div class="completion-head"><strong>Profile Completion</strong><span>${done}/${items.length}</span></div>
+    <div class="completion-bar"><span style="width:${pct}%"></span></div>
+    <div class="completion-list">${items.map(([label,ok])=>`<div class="completion-item${ok?' is-done':''}"><span class="completion-check">${ok?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>':''}</span>${label}</div>`).join('')}</div>
+    ${done===items.length?`<div class="completion-promo"><strong>Profile complete!</strong><p>Everything a team could want to know about you is here.</p></div>`:`<div class="completion-promo"><strong>Almost there!</strong><p>Fill in the rest so people can find and trust you faster.</p></div>`}`;
+}
+
+async function loadProfile(){try{let {user:u,stats}=await api('/api/me');latestProfile=u;myPublicId=u.public_id;myUsername=u.username;$('displayName').textContent=u.name;$('publicIdChip').textContent=u.public_id;$('username').textContent=u.username;$('roleTitle').textContent=u.role_title||'';$('bioText').textContent=u.bio||'No bio yet.';$('followersCount').textContent=stats.followers;$('followingCount').textContent=stats.following;$('avatar').innerHTML=avatar(u.name,u.photo);$('profilePhoto').innerHTML=avatar(u.name,u.photo);social(u);['name','bio','linkedin','github','portfolio'].forEach(k=>$(k).value=u[k]||'');$('usernameInput').value=u.username;$('roleTitleInput').value=u.role_title||'';$('otherWebsite').value=u.other_website||'';updateBioCount();renderMiniProfile(u,stats);renderCompletion(u);await Promise.all([loadEducation(),loadSkills(),loadProjects()]);renderMiniProfile(u,stats);renderCompletion(u)}catch(e){if(/logged in/i.test(e.message))location.href='login.html';else{$('displayName').textContent='Profile setup needs attention';msg(e.message,'error')}}}
+async function loadEducation(){try{let {education}=await api('/api/profile/education');$('educationList').dataset.items=JSON.stringify(education);$('educationList').innerHTML=education.length?education.map((e,i)=>`<article class="education-card" style="--i:${i}"><div><strong>${esc(e.institution)}</strong><span>${esc([e.degree_course,e.field_of_study].filter(Boolean).join(' · '))}</span><small>${e.start_year||''}${e.start_year?' – ':''}${e.currently_studying?'Present':e.end_year||''}</small></div><div><button class="text-button edit-edu" data-id="${e.id}">Edit</button><button class="text-button delete-edu" data-id="${e.id}">Delete</button></div></article>`).join(''):'<p class="search-empty">No education added yet.</p>';document.querySelectorAll('.edit-edu').forEach(b=>b.onclick=()=>editEdu(b.dataset.id));document.querySelectorAll('.delete-edu').forEach(b=>b.onclick=()=>deleteEdu(b.dataset.id))}catch(e){$('educationList').textContent='Could not load education.'}}
+function editEdu(id){let e=JSON.parse($('educationList').dataset.items).find(x=>x.id===id);$('educationId').value=id;[['institution','institution'],['degreeCourse','degree_course'],['fieldOfStudy','field_of_study'],['startYear','start_year'],['endYear','end_year']].forEach(x=>$(x[0]).value=e[x[1]]||'');$('currentlyStudying').checked=e.currently_studying;$('educationForm').hidden=false}
+async function deleteEdu(id){if(!confirm('Delete this education record?'))return;try{msg((await api('/api/profile/education/'+id,{method:'DELETE'})).message,'success');loadEducation()}catch(e){msg(e.message,'error')}}
+async function loadSkills(){try{userSkills=(await api('/api/profile/skills')).skills;renderSkills()}catch(e){$('skillsRow').textContent='Could not load skills.'}}
+function renderSkills(){$('skillsRow').innerHTML=userSkills.length?userSkills.map(s=>`<span class="chip">${esc(s.name)} <button class="remove-skill" data-id="${s.id}" aria-label="Remove ${esc(s.name)}">×</button></span>`).join(''):'<p class="search-empty">Add skills to show your expertise.</p>';document.querySelectorAll('.remove-skill').forEach(b=>b.onclick=async()=>{try{msg((await api('/api/profile/skills/'+b.dataset.id,{method:'DELETE'})).message,'success');loadSkills();loadProjects();if(latestProfile){renderMiniProfile(latestProfile,{followers:$('followersCount').textContent,following:$('followingCount').textContent,projects_joined:$('projectsJoined').textContent});renderCompletion(latestProfile)}}catch(e){msg(e.message,'error')}})}
+async function addSkill(name=$('skillInput').value){try{msg((await api('/api/profile/skills',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name})})).message,'success');$('skillInput').value='';$('skillSuggestions').innerHTML='';await loadSkills();loadProjects();if(latestProfile){renderMiniProfile(latestProfile,{followers:$('followersCount').textContent,following:$('followingCount').textContent,projects_joined:$('projectsJoined').textContent});renderCompletion(latestProfile)}}catch(e){msg(e.message,'error')}}
+function card(p){let tags=(p.skills||'').split(',').filter(Boolean).map(s=>`<span>${esc(s.trim())}</span>`).join('');return `<article class="project-card"><div class="project-top"><span class="project-tag">${esc(p.category||'PROJECT')}</span><span class="members">${esc(p.status)}</span></div><h2>${esc(p.title)}</h2><p>${esc(p.description||'No description yet.')}</p><div class="project-meta"><span>${esc(p.member_role)}</span><span>${p.team_size} members</span><span>${new Date(p.joined_at||p.created_at).toLocaleDateString()}</span></div>${tags?`<div class="skills">${tags}</div>`:''}${p.can_manage?`<div class="my-project-actions"><a class="secondary-button" href="post-project.html?id=${encodeURIComponent(p.id)}">Edit</a><button class="secondary-button delete-project" data-id="${p.id}">Delete</button></div>`:''}</article>`}
+async function loadProjects(){try{let d=await api('/api/profile/projects'),s=d.stats;[['projectsJoined',s.projects_joined],['currentCount',s.current_projects],['completedCount',s.completed_projects],['teamsJoined',s.teams_joined],['teamsCreated',s.teams_created],['skillsCount',s.skills_count],['ratingValue',s.rating===null?'No ratings yet':s.rating+' ★']].forEach(x=>$(x[0]).textContent=x[1]);$('currentGrid').innerHTML=d.current.length?d.current.map(card).join(''):'<p class="search-empty">No current projects yet.</p>';$('completedGrid').innerHTML=d.completed.length?d.completed.map(card).join(''):'<p class="search-empty">No completed projects yet.</p>';document.querySelectorAll('.delete-project').forEach(b=>b.onclick=async()=>{if(confirm("Delete this project? This can't be undone."))try{msg((await api('/api/projects/'+b.dataset.id,{method:'DELETE'})).message,'success');loadProjects()}catch(e){msg(e.message,'error')}})}catch(e){$('currentGrid').textContent='Could not load projects.'}}
+
+// ---- bio character counter (informational only — no hard cap, so an
+// existing longer bio never gets silently truncated by the field) ----
+function updateBioCount(){$('bioCount').textContent=$('bio').value.length+' characters'}
+$('bio').addEventListener('input',updateBioCount);
+
+// ---- live username availability, reusing the public member search
+// (no dedicated endpoint exists, and this needs none). ----
+let usernameTimer;
+$('usernameInput').addEventListener('input',()=>{
+  clearTimeout(usernameTimer);
+  const value=$('usernameInput').value.trim().toLowerCase();
+  const statusEl=$('usernameStatus');
+  if(!value||value===myUsername){statusEl.hidden=true;return}
+  if(!/^[a-z0-9_]{3,20}$/.test(value)){statusEl.hidden=false;statusEl.className='field-status is-error';statusEl.textContent='Invalid';return}
+  statusEl.hidden=false;statusEl.className='field-status is-checking';statusEl.textContent='Checking…';
+  usernameTimer=setTimeout(async()=>{
+    try{
+      const d=await api('/api/members?q='+encodeURIComponent(value)+'&page=0');
+      const taken=d.members.some(m=>m.username===value&&m.public_id!==myPublicId);
+      statusEl.className='field-status '+(taken?'is-error':'is-ok');
+      statusEl.textContent=taken?'Taken':'Available';
+    }catch(_){statusEl.hidden=true}
+  },350);
+});
+
+// ---- edit panel open/close, with the same toggle whichever button is used ----
+function setEditOpen(open){$('editPanel').hidden=!open;if(open)$('editPanel').scrollIntoView({block:'start',behavior:'smooth'})}
+$('editToggle').onclick=()=>setEditOpen($('editPanel').hidden);
+$('editBack').onclick=()=>setEditOpen(false);
+$('profileForm').onsubmit=async e=>{e.preventDefault();let username=$('usernameInput').value.trim().toLowerCase();if(!/^[a-z0-9_]{3,20}$/.test(username))return msg('Username must be 3–20 lowercase letters, numbers, or underscores.','error');try{msg((await api('/api/profile',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:$('name').value,username,roleTitle:$('roleTitleInput').value,bio:$('bio').value,linkedin:$('linkedin').value,github:$('github').value,portfolio:$('portfolio').value,otherWebsite:$('otherWebsite').value})})).message,'success');loadProfile()}catch(e){msg(e.message,'error')}};
+$('showEducation').onclick=()=>{$('educationForm').reset();$('educationId').value='';$('educationForm').hidden=false};$('cancelEducation').onclick=()=>$('educationForm').hidden=true;$('currentlyStudying').onchange=()=>{$('endYear').disabled=$('currentlyStudying').checked};$('educationForm').onsubmit=async e=>{e.preventDefault();let id=$('educationId').value,body={institution:$('institution').value,degreeCourse:$('degreeCourse').value,fieldOfStudy:$('fieldOfStudy').value,startYear:$('startYear').value,endYear:$('endYear').value,currentlyStudying:$('currentlyStudying').checked};try{msg((await api(id?'/api/profile/education/'+id:'/api/profile/education',{method:id?'PUT':'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})).message,'success');$('educationForm').hidden=true;loadEducation()}catch(e){msg(e.message,'error')}};
+$('addSkill').onclick=()=>addSkill();$('skillInput').oninput=async()=>{let q=$('skillInput').value.trim();if(!q)return $('skillSuggestions').innerHTML='';try{let d=await api('/api/skills?q='+encodeURIComponent(q));$('skillSuggestions').innerHTML=d.skills.filter(s=>!userSkills.some(x=>x.id===s.id)).map(s=>`<button data-name="${esc(s.name)}">${esc(s.name)}</button>`).join('');$('skillSuggestions').querySelectorAll('button').forEach(b=>b.onclick=()=>addSkill(b.dataset.name))}catch(e){}};$('skillInput').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();addSkill()}};$('photoFile').onchange=()=>{let f=$('photoFile').files[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>5*1024*1024)return msg('Choose a JPG, PNG, or WebP image under 5MB.','error');let r=new FileReader();r.onload=async()=>{try{let d=await api('/api/profile/photo',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({imageDataUrl:r.result})});$('avatar').innerHTML=avatar('',d.photo);$('profilePhoto').innerHTML=avatar('',d.photo);msg(d.message,'success');loadProfile()}catch(e){msg(e.message,'error')}};r.readAsDataURL(f)};$('removePhoto').onclick=async()=>{try{msg((await api('/api/profile/photo',{method:'DELETE'})).message,'success');loadProfile()}catch(e){msg(e.message,'error')}};document.querySelectorAll('.identity-tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.identity-tabs button').forEach(x=>x.classList.toggle('is-active',x===b));document.querySelectorAll('.tab-panel').forEach(x=>x.classList.toggle('is-active',x.id==='tab-'+b.dataset.tab))});loadProfile();
+</script></body></html>

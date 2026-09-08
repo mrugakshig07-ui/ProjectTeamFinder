@@ -1,0 +1,9 @@
+# Secrets — never commit. The service-role key bypasses all database security.
+backend/.env
+.env
+
+# Dependencies
+node_modules/
+
+# OS noise
+.DS_Store

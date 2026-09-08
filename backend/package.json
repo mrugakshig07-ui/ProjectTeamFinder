@@ -1,0 +1,21 @@
+{
+  "name": "projectfinder-backend",
+  "version": "1.0.0",
+  "description": "ProjectFinder backend (Express + Supabase)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node test/flows.test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.57.4",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  }
+}
