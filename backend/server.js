@@ -12,8 +12,12 @@ const APP_URL = (process.env.APP_URL || `http://localhost:${PORT}`).replace(/\/$
 const requiredEnvironment = ["SUPABASE_URL", "SUPABASE_ANON_KEY", "SUPABASE_SERVICE_ROLE_KEY"];
 
 if (requiredEnvironment.some((name) => !process.env[name])) {
-    console.error("Missing Supabase settings. Copy backend/.env.example to backend/.env and fill all SUPABASE values.");
-    process.exit(1);
+    // process.exit() would kill the whole runtime on a serverless platform
+    // (Vercel etc.), not just this request, so this throws instead. Locally
+    // that surfaces the same message and still stops the process before
+    // app.listen() runs; on a serverless platform it surfaces as a clear
+    // 500 in the function logs instead of an opaque crash.
+    throw new Error("Missing Supabase settings. Set SUPABASE_URL, SUPABASE_ANON_KEY and SUPABASE_SERVICE_ROLE_KEY (locally: copy backend/.env.example to backend/.env; on a host like Vercel: set them as project environment variables).");
 }
 
 // The browser-facing anon key is not sufficient for this server: registration
@@ -2304,6 +2308,21 @@ async function reportDatabase() {
     console.error("--------------------------------------------------------------\n");
 }
 
-Promise.allSettled([ensureAvatarBucket(), ensureTeamFilesBucket(), reportDatabase()]).then(() => {
-    app.listen(PORT, () => console.log(`ProjectFinder running at ${APP_URL} using Supabase.`));
-});
+// process.env.VERCEL is set automatically by Vercel's build and function
+// runtime (not something to configure by hand). Everywhere else — running
+// directly with `node server.js` / `npm start`, or the test suite's plain
+// require() of this file to get a live server on a test port — still binds
+// a port exactly as before. Only on Vercel must this skip app.listen(): a
+// serverless function must never try to bind one itself.
+if (!process.env.VERCEL) {
+    Promise.allSettled([ensureAvatarBucket(), ensureTeamFilesBucket(), reportDatabase()]).then(() => {
+        app.listen(PORT, () => console.log(`ProjectFinder running at ${APP_URL} using Supabase.`));
+    });
+} else {
+    // Serverless cold start: still run the startup checks (bucket creation,
+    // schema verification) so problems show up in the platform's function
+    // logs, just without ever binding a port.
+    Promise.allSettled([ensureAvatarBucket(), ensureTeamFilesBucket(), reportDatabase()]);
+}
+
+module.exports = app;
