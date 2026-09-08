@@ -31,8 +31,12 @@ try {
         if (payload.role && payload.role !== "service_role") throw new Error("not-service-role");
     }
 } catch (_) {
-    console.error("SUPABASE_SERVICE_ROLE_KEY must be the Service Role key from Supabase Settings → API, not the anon/public key.");
-    process.exit(1);
+    // Same reasoning as the missing-env-vars check above: process.exit()
+    // would kill a serverless runtime outright (Vercel reports every
+    // subsequent request as a generic FUNCTION_INVOCATION_FAILED with no
+    // detail), so this throws instead — same message, but it surfaces
+    // properly in both a local console and a host's function logs.
+    throw new Error("SUPABASE_SERVICE_ROLE_KEY must be the Service Role key from Supabase Settings → API, not the anon/public key.");
 }
 
 // Service-role client: bypasses RLS. Used for almost everything since
