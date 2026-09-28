@@ -1,0 +1,41 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Check your email · ProjectFinder</title><link rel="stylesheet" href="style.css"></head><body class="auth-page"><main class="auth-shell"><section class="auth-intro" aria-hidden="true"><a class="brand" href="/index.html"><span class="brand-mark">✦</span> ProjectFinder</a><div class="intro-copy"><span class="eyebrow">ALMOST THERE</span><h1>One more step before you build.</h1><p>Confirming your email keeps your account — and your future teammates — secure.</p></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div></section><section class="auth-panel"><a href="/index.html" class="back-link">← Back to home</a><div class="auth-heading"><span class="eyebrow" id="eyebrow">CHECK YOUR EMAIL</span><h2 id="title">Check your email</h2><p id="verificationMessage">We sent a verification link to your email address. Open it to activate your account, then return here to sign in.</p></div><a id="loginLink" href="/login.html" class="primary-button auth-button" style="display:none;text-align:center;text-decoration:none;justify-content:center;">Go to login</a><form id="resendForm" class="auth-form" style="display:none;"><label for="resendEmail">Email address</label><input type="email" id="resendEmail" placeholder="you@example.com" required><button type="submit" class="primary-button auth-button">Resend verification email <span>→</span></button></form><div id="message" class="profile-message" role="status"></div></section></main>
+<script>
+    function showMessage(el, text, type) { el.textContent = text; el.classList.remove('is-visible', 'is-error', 'is-success'); void el.offsetWidth; el.classList.add('is-visible', type === 'error' ? 'is-error' : 'is-success'); }
+    async function postJSON(url, body) {
+        let response;
+        try { response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); }
+        catch (err) { throw new Error("Can't reach the server. Make sure it's running and check your connection."); }
+        try { return await response.json(); }
+        catch (err) { throw new Error('Server sent an unexpected response. Please try again.'); }
+    }
+
+    const status = new URLSearchParams(window.location.search).get('status');
+    const title = document.getElementById('title'), eyebrow = document.getElementById('eyebrow'), message = document.getElementById('verificationMessage'), loginLink = document.getElementById('loginLink'), resendForm = document.getElementById('resendForm');
+
+    if (status === 'verified') {
+        eyebrow.textContent = 'EMAIL VERIFIED';
+        title.textContent = 'Email verified';
+        message.textContent = 'Your account is active. You can now sign in.';
+        loginLink.style.display = 'flex';
+    } else if (status === 'invalid') {
+        eyebrow.textContent = 'LINK UNAVAILABLE';
+        title.textContent = 'Verification link unavailable';
+        message.textContent = 'This link is invalid, expired, or was already used. Request a new one below.';
+        resendForm.style.display = 'block';
+    } else {
+        resendForm.style.display = 'block';
+    }
+
+    const form = document.getElementById('resendForm'), status2 = document.getElementById('message'), button = resendForm.querySelector('button[type="submit"]');
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        showMessage(status2, 'Sending…', 'neutral');
+        button.disabled = true; button.dataset.loading = 'true';
+        try {
+            const data = await postJSON('/api/resend-verification', { email: resendEmail.value.trim() });
+            showMessage(status2, data.message || 'If that account exists, a new verification email has been sent.', data.success ? 'success' : 'error');
+        } catch (error) { showMessage(status2, error.message, 'error'); }
+        finally { button.disabled = false; button.dataset.loading = 'false'; }
+    });
+</script>
+</body></html>

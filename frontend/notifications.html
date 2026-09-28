@@ -1,0 +1,72 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Notifications · ProjectFinder</title><link rel="stylesheet" href="style.css"><script src="app.js" defer></script><script src="ui.js"></script></head><body class="notifications-page">
+<nav class="navbar"><div class="logo">ProjectFinder</div><div class="nav-links"><a class="nav-primary" href="projects.html">Projects</a><a class="nav-primary" href="members.html">Members</a><button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div></nav>
+<main class="notif-shell">
+
+  <header class="notif-hero">
+    <span class="notif-hero-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 4.2 1.2 5.6 2 6.6H4c.8-1 2-2.4 2-6.6Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></span>
+    <div class="notif-hero-text">
+      <p class="profile-label">NOTIFICATIONS</p>
+      <h1>Notifications</h1>
+      <p class="team-intro">Stay updated with your latest activity, messages and opportunities.</p>
+    </div>
+    <span class="notif-doodle">Good<br>Things<br>Ahead <span class="conn-heart">♡</span></span>
+  </header>
+
+  <div id="message" class="profile-message" role="status"></div>
+
+  <div class="conn-layout">
+    <div class="conn-main">
+
+      <nav class="notif-tabs" id="notifTabs">
+        <button class="is-active" data-tab="all">All <span class="count-badge" id="tabAllCount">0</span></button>
+        <button data-tab="messages">Messages <span class="count-badge" id="tabMsgCount">0</span></button>
+        <button data-tab="requests">Requests <span class="count-badge" id="tabReqCount">0</span></button>
+        <button data-tab="team_updates">Team Updates <span class="count-badge" id="tabTeamCount">0</span></button>
+        <button data-tab="system">System <span class="count-badge" id="tabSysCount">0</span></button>
+        <label class="conn-sort">
+          <select id="sortSelect"><option value="latest">Latest first</option><option value="oldest">Oldest first</option></select>
+        </label>
+        <button type="button" class="text-button" id="markAll" hidden>Mark all read</button>
+      </nav>
+
+      <div id="feed" class="notif-feed"><p class="search-empty">Loading notifications…</p></div>
+    </div>
+
+    <aside class="conn-aside">
+      <div class="findteams-stats-card notif-summary-card">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 4.2 1.2 5.6 2 6.6H4c.8-1 2-2.4 2-6.6Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg> Notification Summary</h3>
+        <div class="notif-summary-grid">
+          <div class="notif-summary-stat notif-summary-messages"><strong id="statMsg">—</strong><span>New Messages</span></div>
+          <div class="notif-summary-stat notif-summary-requests"><strong id="statReq">—</strong><span>Requests</span></div>
+          <div class="notif-summary-stat notif-summary-team"><strong id="statTeam">—</strong><span>Team Updates</span></div>
+          <div class="notif-summary-stat notif-summary-system"><strong id="statSys">—</strong><span>System</span></div>
+        </div>
+      </div>
+
+      <div class="findteams-cta-card notif-actions-card">
+        <h3>⚡ Quick Actions</h3>
+        <div class="teamdash-quick-actions">
+          <a class="teamdash-quick-action" href="messages.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16a1 1 0 0 1 1 1V16a1 1 0 0 1-1 1H9l-4.5 4V17H4a1 1 0 0 1-1-1V6.5a1 1 0 0 1 1-1Z"/></svg>
+            View all messages
+          </a>
+          <a class="teamdash-quick-action" href="connections.html?tab=requests">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.8 19c.6-3.2 3-5 6.2-5s5.6 1.8 6.2 5"/><path d="M18 8v6M15 11h6"/></svg>
+            View connection requests
+          </a>
+          <a class="teamdash-quick-action" href="projects.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.8 19c.6-3.2 3-5 6.2-5s5.6 1.8 6.2 5"/><circle cx="17" cy="7.5" r="2.4"/><path d="M15.6 11.3c2.6.2 4.4 1.9 4.9 4.6"/></svg>
+            Browse teams
+          </a>
+        </div>
+      </div>
+
+      <a class="notif-promo-card" href="projects.html">
+        <span class="notif-promo-icon">📣</span>
+        <strong>More Connections<br>= More Opportunities</strong>
+        <p>Be active, engage, and build your dream network!</p>
+        <span class="app-gradient-button notif-promo-btn">Explore Teams <span>→</span></span>
+      </a>
+    </aside>
+  </div>
+</main><script src="notifications.js"></script></body></html>

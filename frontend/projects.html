@@ -1,0 +1,122 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Find Teams · ProjectFinder</title><link rel="stylesheet" href="style.css"><script src="app.js" defer></script><script src="ui.js"></script></head><body class="projects-page findteams-page"><nav class="navbar"><div class="logo"><span class="logo-mark">✦</span> ProjectFinder</div><div class="nav-links"><a class="nav-primary" href="projects.html">Projects</a><a class="nav-primary" href="members.html">Members</a><button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div></nav>
+<main class="findteams-shell">
+
+  <section class="findteams-hero">
+    <div class="findteams-hero-text">
+      <h1>Find Teams</h1>
+      <p>Discover amazing teams, join projects, and be part of something great.</p>
+    </div>
+    <div class="findteams-hero-art" aria-hidden="true">
+      <span class="findteams-hero-note">Better<br>Together <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9Z"/></svg></span>
+      <svg class="findteams-hero-scene" viewBox="0 0 220 130" fill="none">
+        <path d="M0 100 L45 40 L75 70 L110 20 L150 85 L180 55 L220 100 Z" fill="url(#mtn1)"/>
+        <path d="M20 110 L60 65 L95 95 L135 55 L170 100 L220 110 Z" fill="url(#mtn2)"/>
+        <circle cx="185" cy="25" r="12" fill="url(#sun)"/>
+        <g stroke="#4c3f66" stroke-width="2.4" stroke-linecap="round">
+          <path d="M60 130 V96 M60 96 l-8 14 M60 96 l8 14 M60 108 l-10 6 M60 108 l10 6"/>
+          <path d="M85 130 V90 M85 90 l-9 15 M85 90 l9 15 M85 103 l-11 7 M85 103 l11 7"/>
+          <path d="M110 130 V94 M110 94 l-8 14 M110 94 l8 14 M110 106 l-10 6 M110 106 l10 6"/>
+          <path d="M135 130 V88 M135 88 l-9 16 M135 88 l9 16 M135 101 l-11 7 M135 101 l11 7"/>
+        </g>
+        <path d="M150 40 q20 -22 38 -8" stroke="#7c6a9e" stroke-width="2" fill="none" stroke-dasharray="1 6" stroke-linecap="round"/>
+        <path d="M186 30 l4 -8 l7 3 Z" fill="#a390d4"/>
+        <defs>
+          <linearGradient id="mtn1" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c9bdf0"/><stop offset="1" stop-color="#b7a8e6"/></linearGradient>
+          <linearGradient id="mtn2" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#9786dd"/><stop offset="1" stop-color="#7c6bc4"/></linearGradient>
+          <radialGradient id="sun"><stop stop-color="#ffd9ec"/><stop offset="1" stop-color="#f0a8cc"/></radialGradient>
+        </defs>
+      </svg>
+    </div>
+  </section>
+
+  <form id="searchForm" class="findteams-search-row">
+    <div class="findteams-search-bar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m20 20-4.3-4.3"/></svg>
+      <input id="q" type="search" placeholder="Search by skills, project type, or team name…">
+    </div>
+    <button type="submit" class="app-gradient-button findteams-search-button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m20 20-4.3-4.3"/></svg>Search</button>
+  </form>
+
+  <div class="findteams-filter-row">
+    <input type="hidden" id="category">
+    <div class="category-pills" id="categoryPills">
+      <button type="button" class="is-active" data-cat="">All</button>
+      <button type="button" data-cat="Design">Design</button>
+      <button type="button" data-cat="Development">Development</button>
+      <button type="button" data-cat="Marketing">Marketing</button>
+      <button type="button" data-cat="Data">Data</button>
+      <button type="button" data-cat="Business">Business</button>
+      <button type="button" data-cat="Other">Other</button>
+    </div>
+    <button type="button" class="findteams-filters-toggle" id="filtersToggle" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+      Filters
+      <svg class="findteams-filters-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+  </div>
+  <div class="findteams-filters-panel" id="filtersPanel" hidden>
+    <label>Skills<input id="skills" placeholder="e.g. Figma, Python"></label>
+    <label>Required role<input id="roles" placeholder="e.g. Designer"></label>
+    <label>Status<select id="status"><option value="">Any status</option><option value="Open">Recruiting</option><option value="In Progress">In Progress</option><option value="On Hold">On Hold</option><option value="Closed">Completed</option></select></label>
+    <label>Availability<input id="availability" placeholder="e.g. 10 hrs/week"></label>
+  </div>
+
+  <div class="findteams-body">
+    <div class="findteams-main">
+
+      <section class="findteams-section">
+        <div class="findteams-section-head">
+          <h2><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.2 6.8L21 11l-6.8 2.2L12 20l-2.2-6.8L3 11l6.8-2.2L12 2z"/></svg>Featured Teams</h2>
+          <a href="#allResultsSection" data-view-all="featured">View all <span>→</span></a>
+        </div>
+        <div class="findteams-card-grid" id="featuredGrid"><p class="search-empty">Loading…</p></div>
+      </section>
+
+      <section class="findteams-section">
+        <div class="findteams-section-head">
+          <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.8 19c.6-3.2 3-5 6.2-5s5.6 1.8 6.2 5"/><circle cx="17" cy="7.5" r="2.4"/><path d="M15.6 11.3c2.6.2 4.4 1.9 4.9 4.6"/></svg>Teams Looking for Members</h2>
+          <a href="#allResultsSection" data-view-all="open">View all <span>→</span></a>
+        </div>
+        <div class="findteams-card-grid" id="openGrid"><p class="search-empty">Loading…</p></div>
+      </section>
+
+      <section class="findteams-section" id="allResultsSection">
+        <div class="findteams-section-head"><h2>All results</h2></div>
+        <div id="message" class="profile-message"></div>
+        <div id="list" class="findteams-card-grid"><p class="search-empty">Loading projects…</p></div>
+        <button id="more" class="secondary-button" hidden>Load more</button>
+      </section>
+
+    </div>
+
+    <aside class="findteams-side">
+      <div class="findteams-cta-card">
+        <span class="findteams-cta-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 3.5c3 0 6 3 6 6-3.5 1-6.5 3-9 6l-3-3c3-2.5 5-5.5 6-9Z"/><path d="M9.5 14 6 17.5M4 20l1.5-3.5L8 19 4 20Z"/><circle cx="15.5" cy="8.5" r="1.5"/></svg></span>
+        <h3>Start Your Own Team</h3>
+        <p>Have an idea? Create your team and find the right people.</p>
+        <a class="app-gradient-button" href="post-project.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Create Team</a>
+      </div>
+
+      <div class="findteams-stats-card">
+        <h3>Team Stats</h3>
+        <div class="findteams-stats-grid">
+          <div class="findteams-stat"><span class="findteams-stat-icon findteams-stat-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.8 19c.6-3.2 3-5 6.2-5s5.6 1.8 6.2 5"/><circle cx="17" cy="7.5" r="2.4"/><path d="M15.6 11.3c2.6.2 4.4 1.9 4.9 4.6"/></svg></span><strong id="statActive">—</strong><span>Active Teams</span></div>
+          <div class="findteams-stat"><span class="findteams-stat-icon findteams-stat-members"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M4.8 20c.8-3.6 3.4-5.6 7.2-5.6s6.4 2 7.2 5.6"/></svg></span><strong id="statMembers">—</strong><span>Total Members</span></div>
+          <div class="findteams-stat"><span class="findteams-stat-icon findteams-stat-projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 6.5a1 1 0 0 1 1-1h4.4l1.6 2h9a1 1 0 0 1 1 1v9.5a1 1 0 0 1-1 1h-15a1 1 0 0 1-1-1v-11.5Z"/></svg></span><strong id="statProjects">—</strong><span>Projects Started</span></div>
+          <div class="findteams-stat"><span class="findteams-stat-icon findteams-stat-new"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="16" rx="2.5"/><path d="M3.5 9.5h17M8 3v3M16 3v3"/></svg></span><strong id="statNew">—</strong><span>New Today</span></div>
+        </div>
+      </div>
+
+      <div class="findteams-why-card">
+        <h3>Why Join Teams?</h3>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>Work on exciting projects</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>Meet like-minded people</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>Build your portfolio</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>Grow your skills</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</main>
+<script src="projects.js"></script></body></html>

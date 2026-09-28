@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post a Project - ProjectFinder</title>
+  <link rel="stylesheet" href="style.css"><script src="app.js" defer></script>
+</head>
+<body>
+  <nav class="navbar"><div class="logo">ProjectFinder</div><div class="nav-links"><a class="nav-primary" href="projects.html">Projects</a><a class="nav-primary" href="members.html">Members</a><button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div></nav>
+  <main class="profile-container">
+    <div class="profile-header"><p class="profile-label" id="pageLabel">POST A PROJECT</p><h1 id="pageTitle">Share what you're building</h1><p class="profile-subtitle">Tell collaborators what the project needs — this appears on the homepage feed.</p></div>
+    <section class="profile-card">
+      <form id="projectForm">
+        <label for="title">Project title</label><input type="text" id="title" placeholder="AI Resume Analyzer" required>
+        <label for="description">Description</label><textarea id="description" rows="5" placeholder="What are you building, and why?"></textarea>
+        <label for="skills">Skills needed <small>(comma separated)</small></label><input type="text" id="skills" placeholder="AI, Python, UI/UX">
+        <label for="category">Category</label><input type="text" id="category" placeholder="Startup, Hackathon, Open Source...">
+        <label for="rolesNeeded">Roles needed <small>(comma separated)</small></label><input type="text" id="rolesNeeded" placeholder="Designer, Backend Developer">
+        <label for="availability">Availability</label><input type="text" id="availability" placeholder="10 hours/week, weekends">
+        <label for="maxMembers">Maximum team members</label><input type="number" id="maxMembers" min="1" max="100" value="5">
+        <label for="status">Status</label>
+        <select id="status">
+          <option value="Open">Open — looking for collaborators</option>
+          <option value="In Progress">In Progress</option>
+          <option value="On Hold">On Hold</option>
+          <option value="Closed">Closed</option>
+        </select>
+        <label for="dueDate">Due date <small>(optional)</small></label><input type="date" id="dueDate">
+        <label for="progress">Progress <small id="progressValue">0%</small></label><input type="range" id="progress" min="0" max="100" step="5" value="0">
+        <label for="link">Project link <small>(optional)</small></label><input type="url" id="link" placeholder="https://github.com/you/project">
+        <button type="submit" class="primary-button save-button" id="submitButton">Post Project</button>
+        <div id="projectMessage" class="profile-message" role="status"></div>
+      </form>
+    </section>
+  </main>
+  <script>
+    function showMessage(text, type) {
+      const el = document.getElementById("projectMessage");
+      el.textContent = text;
+      el.classList.remove("is-visible", "is-error", "is-success");
+      void el.offsetWidth;
+      el.classList.add("is-visible", type === "error" ? "is-error" : type === "success" ? "is-success" : "");
+    }
+
+    const projectId = new URLSearchParams(window.location.search).get("id");
+    const titleField = document.getElementById("title"), descriptionField = document.getElementById("description"), skillsField = document.getElementById("skills"), categoryField = document.getElementById("category"), statusField = document.getElementById("status"), linkField = document.getElementById("link"), rolesField = document.getElementById("rolesNeeded"), availabilityField = document.getElementById("availability"), maxMembersField = document.getElementById("maxMembers"), dueDateField = document.getElementById("dueDate"), progressField = document.getElementById("progress");
+    const submitButton = document.getElementById("submitButton");
+    progressField.addEventListener("input", () => { document.getElementById("progressValue").textContent = progressField.value + "%"; });
+
+    async function requireLogin() {
+      let response;
+      try { response = await fetch("/api/me"); } catch (error) { showMessage("Can't reach the server. Make sure it's running and check your connection.", "error"); return null; }
+      let data;
+      try { data = await response.json(); } catch (error) { showMessage("Server sent an unexpected response. Please try again.", "error"); return null; }
+      if (!data.success) { window.location.href = "login.html"; return null; }
+      return data.user;
+    }
+
+    async function loadForEdit() {
+      if (!projectId) return;
+      document.getElementById("pageLabel").textContent = "EDIT PROJECT";
+      document.getElementById("pageTitle").textContent = "Edit your project";
+      submitButton.textContent = "Save Changes";
+      let response, data;
+      try { response = await fetch(`/api/projects/${projectId}`); data = await response.json(); }
+      catch (error) { showMessage("Can't load this project right now.", "error"); return; }
+      if (!data.success) { showMessage(data.message || "Project not found.", "error"); return; }
+      const project = data.project;
+      titleField.value = project.title || ""; descriptionField.value = project.description || ""; skillsField.value = project.skills || ""; categoryField.value = project.category || ""; statusField.value = project.status || "Open"; linkField.value = project.link || ""; rolesField.value = project.roles_needed || ""; availabilityField.value = project.availability || ""; maxMembersField.value = project.max_members || 5; dueDateField.value = project.due_date || ""; progressField.value = project.progress || 0; document.getElementById("progressValue").textContent = (project.progress || 0) + "%";
+    }
+
+    (async () => { const user = await requireLogin(); if (user) loadForEdit(); })();
+
+    document.getElementById("projectForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!titleField.value.trim()) return showMessage("A project title is required.", "error");
+      const payload = { title: titleField.value.trim(), description: descriptionField.value.trim(), skills: skillsField.value.trim(), category: categoryField.value.trim(), status: statusField.value, link: linkField.value.trim(), rolesNeeded: rolesField.value.trim(), availability: availabilityField.value.trim(), maxMembers: maxMembersField.value, dueDate: dueDateField.value, progress: Number(progressField.value) };
+      submitButton.disabled = true; submitButton.dataset.loading = "true";
+      try {
+        const response = await fetch(projectId ? `/api/projects/${projectId}` : "/api/projects", { method: projectId ? "PUT" : "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+        let data;
+        try { data = await response.json(); } catch (error) { throw new Error("Server sent an unexpected response. Please try again."); }
+        if (data.success) { showMessage(data.message, "success"); setTimeout(() => window.location.href = "my-projects.html", 700); }
+        else { showMessage(data.message || "Could not save this project.", "error"); submitButton.disabled = false; submitButton.dataset.loading = "false"; }
+      } catch (error) {
+        showMessage(error.message || "Can't reach the server. Make sure it's running and check your connection.", "error");
+        submitButton.disabled = false; submitButton.dataset.loading = "false";
+      }
+    });
+
+  </script>
+</body>
+</html>

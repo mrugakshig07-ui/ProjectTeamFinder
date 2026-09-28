@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome back · ProjectFinder</title>
+    <link rel="stylesheet" href="style.css"><script src="app.js" defer></script>
+</head>
+<body class="auth-page">
+    <main class="auth-shell">
+        <section class="auth-intro" aria-hidden="true">
+            <a class="brand" href="/index.html"><span class="brand-mark">✦</span> ProjectFinder</a>
+            <div class="intro-copy"><span class="eyebrow">BUILD TOGETHER</span><h1>Good projects start with the right people.</h1><p>Find collaborators, share your strengths, and turn a great idea into something real.</p></div>
+            <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+        </section>
+        <section class="auth-panel">
+            <a href="/index.html" class="back-link">← Back to home</a>
+            <div class="auth-heading"><span class="eyebrow">WELCOME BACK</span><h2>Sign in to your account</h2><p>Pick up where your next project left off.</p></div>
+            <form id="loginForm" class="auth-form">
+                <label for="email">Email address</label><input type="email" id="email" autocomplete="email" placeholder="you@example.com" required>
+                <label for="password">Password</label>
+                <div class="password-field"><input type="password" id="password" autocomplete="current-password" placeholder="Enter your password" required><button class="password-toggle" type="button" data-password-toggle="password" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.5"/></svg></button></div>
+                <div class="login-options"><label class="remember-option"><input type="checkbox" id="rememberMe"><span>Keep me signed in</span></label><a href="/forgot-password.html">Forgot password?</a></div>
+                <button type="submit" class="primary-button auth-button">Sign in <span>→</span></button>
+            </form>
+            <div id="loginMessage" class="profile-message" role="status"></div><p class="auth-footer">New to ProjectFinder? <a href="/register.html">Create an account</a></p>
+        </section>
+    </main>
+    <script>
+        document.querySelectorAll('[data-password-toggle]').forEach((button) => button.addEventListener('click', () => { const input=document.getElementById(button.dataset.passwordToggle); const visible=input.type==='text'; input.type=visible?'password':'text'; button.setAttribute('aria-pressed',String(!visible)); button.setAttribute('aria-label',visible?'Show password':'Hide password'); }));
+
+        function showMessage(el, text, type) { el.textContent = text; el.classList.remove('is-visible', 'is-error', 'is-success'); void el.offsetWidth; el.classList.add('is-visible', type === 'error' ? 'is-error' : 'is-success'); }
+        async function postJSON(url, body) {
+            let response;
+            try { response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); }
+            catch (err) { throw new Error("Can't reach the server. Make sure it's running and check your connection."); }
+            try { return await response.json(); }
+            catch (err) { throw new Error('Server sent an unexpected response. Please try again.'); }
+        }
+
+        const form=document.getElementById('loginForm'), message=document.getElementById('loginMessage'), button=form.querySelector('button[type="submit"]');
+        const emailField=document.getElementById('email'), passwordField=document.getElementById('password'), rememberField=document.getElementById('rememberMe');
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            showMessage(message, 'Signing you in…', 'neutral');
+            button.disabled = true; button.dataset.loading = 'true';
+            try {
+                const data = await postJSON('/api/login', { email: emailField.value.trim(), password: passwordField.value, rememberMe: rememberField.checked });
+                if (data.success) { showMessage(message, 'Welcome back!', 'success'); setTimeout(() => location.href = '/profile.html', 450); }
+                else { showMessage(message, data.message || 'Invalid email or password.', 'error'); button.disabled = false; button.dataset.loading = 'false'; }
+            } catch (error) { showMessage(message, error.message, 'error'); button.disabled = false; button.dataset.loading = 'false'; }
+        });
+    </script>
+</body>
+</html>

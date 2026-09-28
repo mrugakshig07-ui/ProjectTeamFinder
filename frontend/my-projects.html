@@ -1,0 +1,105 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>My Projects · ProjectFinder</title><link rel="stylesheet" href="style.css"><script src="app.js" defer></script></head><body class="my-projects-page">
+<nav class="navbar"><div class="logo">ProjectFinder</div><div class="nav-links"><a class="nav-primary" href="projects.html">Projects</a><a class="nav-primary" href="members.html">Members</a><button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div></nav>
+<main class="myprojects-shell">
+  <div class="myprojects-head">
+    <div><h1>My Projects</h1><p>Manage your projects, track progress, and keep your team aligned.</p></div>
+    <a class="app-gradient-button" href="post-project.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Create New Project</a>
+  </div>
+
+  <div class="myprojects-stats" id="myprojectsStats">
+    <div class="myprojects-stat" style="--i:0"><span class="myprojects-stat-icon myprojects-stat-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/></svg></span><div><strong id="statActive">—</strong><span>Active Projects</span></div></div>
+    <div class="myprojects-stat" style="--i:1"><span class="myprojects-stat-icon myprojects-stat-hold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></span><div><strong id="statHold">—</strong><span>On Hold</span></div></div>
+    <div class="myprojects-stat" style="--i:2"><span class="myprojects-stat-icon myprojects-stat-done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5 9 17l10.5-10.5"/></svg></span><div><strong id="statCompleted">—</strong><span>Completed</span></div></div>
+    <div class="myprojects-stat" style="--i:3"><span class="myprojects-stat-icon myprojects-stat-total"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="3"/><path d="M8 3.5V20M3.5 8H20"/></svg></span><div><strong id="statTotal">—</strong><span>Total Projects</span></div></div>
+  </div>
+
+  <div class="myprojects-tabs" id="myprojectsTabs">
+    <button class="is-active" data-tab="active">Active <span id="tabCountActive">0</span></button>
+    <button data-tab="onhold">On Hold <span id="tabCountHold">0</span></button>
+    <button data-tab="completed">Completed <span id="tabCountCompleted">0</span></button>
+  </div>
+
+  <div id="myprojectsList" class="myprojects-list"><p class="search-empty">Loading your projects…</p></div>
+</main>
+<script>
+const $=id=>document.getElementById(id),esc=v=>{const d=document.createElement('div');d.textContent=v==null?'':v;return d.innerHTML};
+async function api(url,o){const r=await fetch(url,o);const d=await r.json().catch(()=>({success:false,message:'The server sent an unreadable response.'}));if(!d.success)throw Error(d.message||'Request failed.');return d}
+
+let buckets={active:[],onHold:[],completed:[]},activeTab='active';
+
+const STATUS_TONE={Open:'is-open','In Progress':'is-progress','On Hold':'is-hold',Closed:'is-closed'};
+
+function dueLabel(d){
+  if(!d)return'';
+  const date=new Date(d+'T00:00:00'),now=new Date();now.setHours(0,0,0,0);
+  const days=Math.round((date-now)/86400000);
+  const formatted=date.toLocaleDateString([], {month:'short',day:'numeric',year:'numeric'});
+  if(days<0)return `<span class="myprojects-due is-overdue">Overdue · ${formatted}</span>`;
+  if(days===0)return `<span class="myprojects-due is-soon">Due today</span>`;
+  if(days<=7)return `<span class="myprojects-due is-soon">Due in ${days}d · ${formatted}</span>`;
+  return `<span class="myprojects-due">Due ${formatted}</span>`;
+}
+
+function projectCard(p){
+  const tags=(p.skills||'').split(',').map(s=>s.trim()).filter(Boolean).slice(0,4);
+  return `<article class="myprojects-card">
+    <div class="myprojects-card-top">
+      <span class="myprojects-card-icon">${esc((p.category||p.title||'P')[0].toUpperCase())}</span>
+      <div class="myprojects-card-heading">
+        <h3><a href="project.html?id=${encodeURIComponent(p.id)}">${esc(p.title)}</a></h3>
+        <span class="status-pill ${STATUS_TONE[p.status]||''}">${esc(p.status)}</span>
+      </div>
+      <div class="myprojects-card-actions">
+        <a class="text-button" href="post-project.html?id=${encodeURIComponent(p.id)}">Edit</a>
+        <button class="text-button myprojects-delete" data-id="${esc(p.id)}">Delete</button>
+      </div>
+    </div>
+    <p>${esc(p.description||'No description yet.')}</p>
+    <div class="myprojects-progress"><div class="myprojects-progress-head"><span>Progress</span><span>${p.progress||0}%</span></div><div class="myprojects-progress-bar"><span style="width:${p.progress||0}%"></span></div></div>
+    <div class="myprojects-card-foot">
+      <span class="myprojects-team-size">${p.team_size} ${p.team_size===1?'member':'members'}${p.max_members?` / ${p.max_members}`:''}</span>
+      ${dueLabel(p.due_date)}
+      ${tags.length?`<span class="myprojects-tags">${tags.map(t=>`<span>${esc(t)}</span>`).join('')}</span>`:''}
+    </div>
+  </article>`;
+}
+
+function renderList(){
+  const map={active:buckets.active,onhold:buckets.onHold,completed:buckets.completed};
+  const list=map[activeTab]||[];
+  $('myprojectsList').innerHTML=list.length?list.map(projectCard).join(''):`<div class="state state-empty"><p>Nothing here yet.</p><span>${activeTab==='active'?'Post a project to see it here.':'Projects will show up here once they match this status.'}</span></div>`;
+  document.querySelectorAll('.myprojects-delete').forEach(btn=>btn.onclick=async()=>{
+    if(!confirm("Delete this project? This can't be undone."))return;
+    try{ await api('/api/projects/'+encodeURIComponent(btn.dataset.id),{method:'DELETE'}); load(); }
+    catch(e){ alert(e.message); }
+  });
+}
+
+async function load(){
+  try{
+    const d=await api('/api/my-projects');
+    buckets={active:d.active,onHold:d.onHold,completed:d.completed};
+    $('statActive').textContent=d.stats.active;
+    $('statHold').textContent=d.stats.on_hold;
+    $('statCompleted').textContent=d.stats.completed;
+    $('statTotal').textContent=d.stats.total;
+    $('tabCountActive').textContent=d.stats.active;
+    $('tabCountHold').textContent=d.stats.on_hold;
+    $('tabCountCompleted').textContent=d.stats.completed;
+    renderList();
+  }catch(e){
+    if(/logged in/i.test(e.message)){location.href='login.html';return}
+    $('myprojectsList').innerHTML=`<div class="state state-error"><p>Could not load your projects.</p><div class="state-actions"><button type="button" class="secondary-button" data-retry>Try again</button></div></div>`;
+  }
+}
+document.addEventListener('click',e=>{if(e.target.closest('[data-retry]'))load()});
+
+$('myprojectsTabs').addEventListener('click',e=>{
+  const btn=e.target.closest('button');if(!btn)return;
+  activeTab=btn.dataset.tab;
+  $('myprojectsTabs').querySelectorAll('button').forEach(b=>b.classList.toggle('is-active',b===btn));
+  renderList();
+});
+
+load();
+</script></body></html>
