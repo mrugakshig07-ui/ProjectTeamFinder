@@ -1,5 +1,5 @@
 // ============================================================
-// ProjectFinder — live database diagnostic
+// ProjectTeamFinder — live database diagnostic
 //
 //   cd backend
 //   node diagnose.js

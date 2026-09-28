@@ -27,7 +27,7 @@ function memberRow(person) {
     <a class="connection-left" href="member-profile.html?user=${encodeURIComponent(person.public_id || '')}">
       <div class="member-avatar">${person.photo ? `<img src="${esc(person.photo)}" alt="">` : '👤'}</div>
       <div>
-        <strong>${esc(person.name || 'ProjectFinder member')}</strong>
+        <strong>${esc(person.name || 'ProjectTeamFinder member')}</strong>
         <span>@${esc(person.username || '')}</span>
       </div>
     </a>
@@ -71,7 +71,7 @@ async function load() {
         <span>${esc(project.availability || 'Availability not specified')}</span>
       </div>
       ${project.link ? `<p class="project-meta"><a href="${esc(project.link)}" target="_blank" rel="noopener">Project link</a></p>` : ''}
-      <p class="project-meta">Owner: <a href="member-profile.html?user=${encodeURIComponent(owner.public_id || '')}">${esc(owner.name || 'ProjectFinder member')}</a></p>
+      <p class="project-meta">Owner: <a href="member-profile.html?user=${encodeURIComponent(owner.public_id || '')}">${esc(owner.name || 'ProjectTeamFinder member')}</a></p>
       <div class="member-actions">${action(project, viewer)}</div>`;
 
     $('team').innerHTML = team.map(memberRow).join('');

@@ -177,7 +177,7 @@ async function ensureProfileForAuthUser(user) {
     if (lookupError) throw lookupError;
     if (existing) return;
     const username = await uniqueUsernameFromAuthUser(user);
-    const name = String(user.user_metadata?.name || user.email?.split("@")[0] || "ProjectFinder member").trim();
+    const name = String(user.user_metadata?.name || user.email?.split("@")[0] || "ProjectTeamFinder member").trim();
     const { error } = await supabase.from("profiles").insert({ user_id: user.id, public_id: await uniquePublicId(), username, name, email: String(user.email || "").toLowerCase() });
     if (error) throw error;
 }
@@ -507,7 +507,7 @@ app.delete("/api/account", requireAuth(async (req, res, user) => {
     const { error } = await supabase.auth.admin.deleteUser(user.id);
     if (error) return res.status(500).json({ success: false, message: safeMessage(error) });
     clearSession(res);
-    res.json({ success: true, message: "Your account and associated ProjectFinder data were deleted." });
+    res.json({ success: true, message: "Your account and associated ProjectTeamFinder data were deleted." });
 }));
 
 // =================================================================
@@ -632,7 +632,7 @@ app.post("/api/profiles/:publicId/follow", requireAuth(async (req, res, user) =>
     if (error) return res.status(400).json({ success: false, message: safeMessage(error) });
     if (settings.notify_new_followers) {
         const { data: actor } = await supabase.from("profiles").select("name").eq("user_id", user.id).single();
-        await supabase.from("notifications").insert({ recipient_user_id: target.user_id, actor_user_id: user.id, follow_id: follow.id, type: "follow", message: `${actor ? actor.name : "A ProjectFinder member"} started following you.` });
+        await supabase.from("notifications").insert({ recipient_user_id: target.user_id, actor_user_id: user.id, follow_id: follow.id, type: "follow", message: `${actor ? actor.name : "A ProjectTeamFinder member"} started following you.` });
     }
     res.status(201).json({ success: true, message: "Following.", stats: await followCounts(target.user_id) });
 }));
@@ -1018,7 +1018,7 @@ app.post("/api/profiles/:publicId/connect", requireAuth(async (req, res, user) =
     if (error) return res.status(400).json({ success: false, message: safeMessage(error) });
     if (settings.notify_connection_requests) {
         const { data: actor } = await supabase.from("profiles").select("name").eq("user_id", user.id).single();
-        await supabase.from("notifications").insert({ recipient_user_id: target.user_id, actor_user_id: user.id, connection_request_id: request.id, type: "connection_request", message: `${actor ? actor.name : "A ProjectFinder member"} sent you a connection request.` });
+        await supabase.from("notifications").insert({ recipient_user_id: target.user_id, actor_user_id: user.id, connection_request_id: request.id, type: "connection_request", message: `${actor ? actor.name : "A ProjectTeamFinder member"} sent you a connection request.` });
     }
     res.status(201).json({ success: true, message: "Connection request sent.", connection: { status: "pending", direction: "sent" } });
 }));
@@ -1031,7 +1031,7 @@ app.put("/api/connections/:id", requireAuth(async (req, res, user) => {
     if ((status === "cancelled" && request.sender_user_id !== user.id) || ((status === "accepted" || status === "rejected") && request.receiver_user_id !== user.id)) return res.status(403).json({ success: false, message: "You cannot update this connection request." });
     const { error } = await supabase.from("connection_requests").update({ status, updated_at: new Date().toISOString() }).eq("id", request.id).eq("status", "pending");
     if (error) return res.status(400).json({ success: false, message: safeMessage(error) });
-    if (status === "accepted") { const senderSettings = await getSettings(request.sender_user_id); if (senderSettings.notify_connection_accepted) { const { data: actor } = await supabase.from("profiles").select("name").eq("user_id", user.id).single(); await supabase.from("notifications").insert({ recipient_user_id: request.sender_user_id, actor_user_id: user.id, connection_request_id: request.id, type: "connection_accepted", message: `${actor ? actor.name : "A ProjectFinder member"} accepted your connection request.` }); } }
+    if (status === "accepted") { const senderSettings = await getSettings(request.sender_user_id); if (senderSettings.notify_connection_accepted) { const { data: actor } = await supabase.from("profiles").select("name").eq("user_id", user.id).single(); await supabase.from("notifications").insert({ recipient_user_id: request.sender_user_id, actor_user_id: user.id, connection_request_id: request.id, type: "connection_accepted", message: `${actor ? actor.name : "A ProjectTeamFinder member"} accepted your connection request.` }); } }
     res.json({ success: true, message: status === "accepted" ? "Connection accepted." : status === "rejected" ? "Connection request rejected." : "Connection request cancelled." });
 }));
 app.delete("/api/connections/:id", requireAuth(async (req, res, user) => {
@@ -1408,7 +1408,7 @@ async function addProjectMember(projectId, userId, role = "Member") {
 
 async function actorName(userId) {
     const { data } = await supabase.from("profiles").select("name").eq("user_id", userId).maybeSingle();
-    return data ? data.name : "A ProjectFinder member";
+    return data ? data.name : "A ProjectTeamFinder member";
 }
 
 // Team activity is best-effort, like notifications: a logging failure must
@@ -2325,7 +2325,7 @@ async function reportDatabase() {
 // serverless function must never try to bind one itself.
 if (!process.env.VERCEL) {
     Promise.allSettled([ensureAvatarBucket(), ensureTeamFilesBucket(), reportDatabase()]).then(() => {
-        app.listen(PORT, () => console.log(`ProjectFinder running at ${APP_URL} using Supabase.`));
+        app.listen(PORT, () => console.log(`ProjectTeamFinder running at ${APP_URL} using Supabase.`));
     });
 } else {
     // Serverless cold start: still run the startup checks (bucket creation,

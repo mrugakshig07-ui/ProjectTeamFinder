@@ -65,7 +65,7 @@
   const sidebar = document.createElement('aside');
   sidebar.className = 'app-sidebar';
   sidebar.innerHTML = `
-    <a class="app-logo" href="index.html"><span class="app-logo-mark">${ICONS.spark}</span><span class="app-logo-word">Project<em>Finder</em></span></a>
+    <a class="app-logo" href="index.html"><span class="app-logo-mark">${ICONS.spark}</span><span class="app-logo-word">Project<em>TeamFinder</em></span></a>
     <nav class="app-sidebar-nav">
       ${NAV_LINKS.map(([href, label, icon, marker]) => `<a class="app-nav-link${active(href)}" href="${href}">${icon}<span>${label}</span>${href === 'notifications.html' ? '<span class="app-nav-badge" id="sidebarNotifBadge" hidden></span>' : marker === 'messages' ? '<span class="app-nav-badge" id="sidebarMessagesBadge" hidden></span>' : ''}</a>`).join('')}
     </nav>

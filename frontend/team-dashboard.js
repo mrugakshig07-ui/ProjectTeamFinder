@@ -91,7 +91,7 @@ function dueLabel(d) {
 
 function renderHeader() {
   const { project, team_code, viewer, roster, stats } = dashboard;
-  document.title = `${project.title} · Team Dashboard · ProjectFinder`;
+  document.title = `${project.title} · Team Dashboard · ProjectTeamFinder`;
   $('tdTitle').textContent = project.title;
   $('tdStatus').textContent = project.status;
   $('tdStatus').className = 'status-pill ' + (STATUS_TONE[project.status] || '');

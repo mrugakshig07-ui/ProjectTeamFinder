@@ -80,7 +80,7 @@ async function signUp(name, username, email) {
 
 (async () => {
     await new Promise(resolve => setTimeout(resolve, 400)); // let the server bind
-    console.log("\nProjectFinder flow tests\n");
+    console.log("\nProjectTeamFinder flow tests\n");
 
     const owner = await signUp("Asha Owner", "asha", "asha@example.com");
     const joiner = await signUp("Ravi Joiner", "ravi", "ravi@example.com");

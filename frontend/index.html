@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProjectFinder</title>
+    <title>ProjectTeamFinder</title>
     <link rel="stylesheet" href="style.css"><script src="app.js" defer></script>
 </head>
 <body class="home-page">
     <nav class="lp-nav">
         <div class="lp-nav-inner">
-            <a class="lp-logo" href="index.html"><span class="lp-logo-mark">✦</span> ProjectFinder</a>
+            <a class="lp-logo" href="index.html"><span class="lp-logo-mark">✦</span> ProjectTeamFinder</a>
 
             <div class="lp-nav-links">
                 <a href="index.html" class="lp-nav-link is-active">Home</a>
@@ -74,10 +74,10 @@
 
                     <div class="lp-preview-card">
                         <div class="lp-preview-top">
-                            <span class="lp-preview-logo"><span class="lp-logo-mark">✦</span> ProjectFinder</span>
+                            <span class="lp-preview-logo"><span class="lp-logo-mark">✦</span> ProjectTeamFinder</span>
                             <span class="lp-preview-icons"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 4.2 1.2 5.6 2 6.6H4c.8-1 2-2.4 2-6.6Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></span>
                         </div>
-                        <p class="lp-preview-welcome" id="lpPreviewWelcome">Live on ProjectFinder</p>
+                        <p class="lp-preview-welcome" id="lpPreviewWelcome">Live on ProjectTeamFinder</p>
                         <p class="lp-preview-sub">Real-time snapshot of what's happening right now</p>
                         <div class="lp-preview-stats">
                             <div><strong id="lpStatTeams">—</strong><span>Active Teams</span></div>
@@ -171,7 +171,7 @@
 
         function renderCard(project, { featured = false, index = 0 } = {}) {
             const profile = project.profiles || {};
-            const author = profile.name || "A ProjectFinder member";
+            const author = profile.name || "A ProjectTeamFinder member";
             const description = project.description ? escapeHtml(project.description) : "No description provided yet.";
             const creator = profile.public_id
                 ? `<a class="project-creator" href="member-profile.html?user=${encodeURIComponent(profile.public_id)}"><span class="creator-avatar">${profile.photo ? `<img src="${escapeHtml(profile.photo)}" alt="">` : escapeHtml(author.charAt(0).toUpperCase())}</span><span><small>Created by</small><strong>${escapeHtml(author)}</strong></span></a>`

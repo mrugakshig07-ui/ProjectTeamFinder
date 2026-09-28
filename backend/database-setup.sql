@@ -1,5 +1,5 @@
 -- ================================================================
--- ProjectFinder — COMPLETE DATABASE SETUP / REPAIR
+-- ProjectTeamFinder — COMPLETE DATABASE SETUP / REPAIR
 -- ================================================================
 -- Run this ONCE in Supabase -> SQL Editor -> New query -> Run.
 --
@@ -859,4 +859,4 @@ insert into public.user_settings (user_id)
 select p.user_id from public.profiles p
 where not exists (select 1 from public.user_settings s where s.user_id = p.user_id);
 
-select 'ProjectFinder database is ready. Restart the backend (npm start).' as result;
+select 'ProjectTeamFinder database is ready. Restart the backend (npm start).' as result;

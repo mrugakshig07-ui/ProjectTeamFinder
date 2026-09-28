@@ -1,4 +1,4 @@
-# ProjectFinder
+# ProjectTeamFinder
 
 A project-collaboration site: post a project, find people, connect with them,
 ask to join a team, or invite someone onto yours.

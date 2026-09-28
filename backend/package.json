@@ -1,7 +1,7 @@
 {
-  "name": "projectfinder-backend",
+  "name": "projectteamfinder-backend",
   "version": "1.0.0",
-  "description": "ProjectFinder backend (Express + Supabase)",
+  "description": "ProjectTeamFinder backend (Express + Supabase)",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
